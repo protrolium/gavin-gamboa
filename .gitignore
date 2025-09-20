@@ -12,6 +12,11 @@ site/assets/cache/
 site/assets/logs/
 site/assets/sessions/
 
+# Ignore compiled templates
+site/templates/dst/
+site/templates/src/ 
+site/templates/errors/
+
 # Ignore UIkit
 site/templates/uikit/
 site/templates/bundle/
