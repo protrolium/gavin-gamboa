@@ -17,6 +17,15 @@ site/templates/dst/
 site/templates/src/ 
 site/templates/errors/
 
+# Ignore certain template files
+site/templates/admin.php
+site/templates/default-page.php
+site/templates/home.php
+site/templates/image.php
+site/templates/social-networks.php
+site/templates/tag.php
+site/templates/tags.php
+
 # Ignore UIkit
 site/templates/uikit/
 site/templates/bundle/
