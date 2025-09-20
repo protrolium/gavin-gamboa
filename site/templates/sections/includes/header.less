@@ -1,0 +1,62 @@
+.uk-navbar-nav > li > a {
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+.uk-navbar-nav > li.uk-active > a {
+    color: var(--active-color);
+}
+
+button.hamburger-nav, .theme-toggle {
+    background-color: transparent;
+    border: none;
+    color: currentColor;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    padding: 2px;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+button.theme-toggle:hover {
+    cursor: pointer;
+}
+
+.uk-offcanvas-container {
+    background-color: var(--bg-color);
+}
+
+.uk-offcanvas-close {
+    cursor: pointer;
+    z-index: 2000;
+    padding: 10px 12px 10px 10px;
+}
+
+.offcanvas-nav-h1 {
+    margin-top: 0.5rem;
+}
+
+// fix mobile x menu nav button not always working
+svg {
+    pointer-events: none;
+  }
+
+#menu {
+    z-index: 1000;
+}
+
+.uk-offcanvas-container {
+    z-index: 1005;
+}
+
+button.hamburger-nav {
+    position: relative;
+    z-index: 1;
+}

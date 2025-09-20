@@ -1,0 +1,52 @@
+<footer uk-scrollspy="cls: uk-animation-fade; delay: 250; repeat: false">
+
+    {* mobile / desktop social row *}
+    <div class="uk-width-1-1 uk-grid-collapse" uk-grid>
+        <div class="uk-width-2-5@m uk-padding uk-padding-remove-bottom">
+            <div class="social-icons-grid">
+                {foreach $pages->get('name=social-networks')->footer as $social}
+                    <div style="width: 30px;">
+                        <a class="uk-icon noHover" href="{$social->hyperlink}" aria-label="{$social->title}" title="{$social->title}" target="_blank">
+                            {$social->markup|noescape}
+                        </a>
+                    </div>
+                {/foreach}
+            </div>
+        </div>
+
+        <div class="uk-width-2-5@m uk-padding uk-padding-remove-bottom uk-padding-remove-right uk-flex uk-flex-wrap uk-flex-baseline uk-flex-center">
+            
+            <div class="uk-width-1-3@m">
+                <p class="uk-margin-remove-bottom uk-text-large">Contact</p>
+                <div style="margin-top: 5px;" class="uk-flex uk-flex-middle uk-margin-bottom">
+                    <span style="letter-spacing: 0.09em;">in@gav.cloud</span> &nbsp;
+                    <a class="uk-text-secondary" href="mailto:in@gav.cloud">
+                        <span class="text-light hover-icon" uk-icon="icon: mail; ratio: 1.1"></span>
+                    </a>
+                </div> 
+            </div>
+
+            <div class="uk-width-2-3@m uk-flex uk-flex-column">
+                {if $page->name != 'promailer'}
+                    {$rockfrontend->render("promailer-subscribe.php")}
+                {/if}
+            </div>
+
+        </div>
+
+        {* desktop logo *}
+        <div class="uk-width-1-5@m uk-padding uk-padding-remove-top uk-padding-remove-bottom uk-flex uk-flex-center">
+            <div class="uk-visible@m">
+                {* <a class="uk-icon noHover" href="{$pages->get('/')->url}" aria-label="Navigate to Home"> *}
+                    <img class="uk-width-small" src="{$pages->get('name=julia-set-001, template=image')->featured_image->first->url}" alt="" uk-img>
+                {* </a> *}
+            </div>
+
+            <div class="uk-hidden@m">
+                <img src="{$pages->get('name=julia-set-001, template=image')->featured_image->first->url}" alt="" uk-img>
+            </div>
+        </div>
+
+    </div>
+    
+</footer>

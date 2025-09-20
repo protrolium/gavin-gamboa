@@ -1,0 +1,103 @@
+<header class="uk-width-1-1">
+    <div class="" uk-sticky="sel-target: .uk-navbar-container; start: 500; animation: uk-animation-fade; show-on-up: true;">
+        
+        {* the mobile nav *}
+        <nav 
+            class="uk-navbar-container uk-hidden@m" 
+            uk-sticky="start: 500; animation: uk-animation-fade; show-on-up: true;" 
+            uk-navbar>
+
+            <div class="uk-navbar-left uk-margin-small-left">
+                <div>
+                    <a class="uk-icon noHover" href="{$pages->get('/')->url}" aria-label="Navigate to Home">
+                        <span class="uk-text-default uk-text-uppercase">{$modules->MarkupMetadata->site_name}</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="uk-navbar-right uk-padding-small">
+
+                <div>
+                    <button id="dark-mode-btn" class="theme-toggle uk-text-large" style="margin-top: -0.12rem;" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode">
+                        <span>{$pages->get('name=theme-switcher-svg, template=image')->markup|noescape}</span>
+                    </button>
+                </div>
+
+                <div id="menuContainer">
+                    <button id="header-nav" class="hamburger-nav uk-text-secondary" uk-toggle="target: #menu" type="button" aria-label="Menu">
+                        <span uk-icon="icon: menu; ratio: 1.5;"></span>
+                    </button>
+                </div>
+
+            </div>
+        </nav>
+
+        {* desktop nav *}
+        
+        <nav class="uk-navbar-container uk-visible@m uk-padding uk-padding-remove-vertical" uk-navbar>
+            <div class="uk-navbar-left">
+                 <div class="uk-padding-small uk-padding-remove-left" style="width: 50px;">
+                    <a class="uk-icon noHover" href="{$pages->get('/')->url}" aria-label="Navigate to Home">
+                        <span class="uk-text-large uk-text-uppercase">{$modules->MarkupMetadata->site_name}</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="uk-navbar-right">
+                <ul class="uk-navbar-nav">
+                    
+                    {* add home + children pages to navItems *}
+                    {var $navItems = new \ProcessWire\PageArray()}
+                    {* {do $navItems->add($home)} *}
+                    
+                    {foreach $home->children() as $children}
+                        {do $navItems->add($children)}
+                    {/foreach}
+                    
+                    {* build the menu *}
+                    {foreach $navItems as $item}
+                        <li n:class="$rockfrontend->isActive($item) ? uk-active">
+                            {if $item == $pages->get('name=wiki')}
+                                <a class="noExternalSVG" href="https://gavart.ist/" target="_blank">Wiki</span></a>
+                            {else}
+                                <a href="{$item->url}">{$item->title}</span></a>
+                            {/if}
+                        </li>
+                    {/foreach}
+                </ul>
+
+                <div>
+                    <button id="dark-mode-btn-desktop" class="theme-toggle uk-text-large" style="margin-bottom: 6px;"  onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode">
+                        <span>{$pages->get('name=theme-switcher-svg, template=image')->markup|noescape}</span>
+                    </button>
+                </div>
+            </div>
+
+        </nav>
+    </div>
+
+    <!-- This is the off-canvas menu -->
+    <div class="uk-width-1-1 uk-animation-fade uk-animation-fast" id="menu" uk-offcanvas>
+        
+        <button id="closeBtn" class="uk-close-large uk-offcanvas-close clickable" type="button" aria-label="Close" uk-close></button>
+        
+        <div class="uk-offcanvas-container uk-flex uk-width-1-1 uk-height-viewport uk-flex-center uk-hidden@m">
+            <nav class="offcanvas-mobile uk-flex-column uk-margin-auto-vertical uk-text-center" uk-navbar>
+
+                {* build the menu *}
+                {foreach $navItems as $item}
+                    <li n:class="$rockfrontend->isActive($item) ? uk-active, uk-text-large, offcanvas-mobile"
+                        style="list-style:none;">
+                        {if $item == $home}
+                            <a class="uk-text-secondary" href="{$item->url}">Home</span></a>
+                        {else}
+                            <a class="uk-text-secondary" href="{$item->url}">{$item->title}</span></a>
+                        {/if}
+                    </li>
+                {/foreach}
+            </nav>
+        </div>
+
+    </div>
+
+</header>

@@ -1,0 +1,110 @@
+<section id="online-world">
+    
+    <div class="uk-width-1-1" uk-height-viewport="expand: true" uk-grid >
+        {if $page??->featured_image??->first}
+            <div class="uk-width-2-3@m">
+                <div class="uk-padding uk-padding-remove-bottom uk-animation-fade">
+                    <img src="{$page->featured_image->first->url}" alt="{$page->featured_image->first->description}" uk-img>
+                </div>
+            </div>
+        {/if}
+
+        <div class="uk-width-1-1">
+            <div class="uk-width-4-5@m" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
+                <div class="uk-width-1-1 uk-padding uk-padding-remove-bottom">
+                    
+                    {* title *}
+                    <h1 style="line-height:1em;">{$page->title|noescape}</h1>
+
+                    {* date + tags *}
+                    <div 
+                        class="uk-padding-small uk-padding-remove-top uk-padding-remove-left uk-text-muted"
+                        uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
+                            <div class="uk-flex uk-flex-middle">
+                                <span class="text-light hover-icon" uk-icon="icon: clock; ratio: 0.8"></span>
+                                &nbsp;
+                                <span class="uk-text-small">{$page->post_date}</span>
+                            </div>
+
+                            {if $page??->categories}
+                                <span class="uk-text-secondary">
+                                    {foreach $page->categories as $tag}
+                                        <span uk-icon="icon: tag; ratio: 0.7"></span>
+                                        <a href="{$tag->url}" alt=""><span>{$tag->title}</span></a>    
+                                    {/foreach}
+                                </span>
+                            {/if}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="uk-width-1-1 uk-padding uk-padding-remove-top uk-padding-remove-bottom">    
+                        {* render the repeater matrix *}
+                        {$rockfrontend->render("/sections/includes/repeater-matrix-default.latte")}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        {* gallery *}
+        {if $page??->gallery}
+            {if $page->gallery->count > 1}
+                <div>
+                    <div class="uk-padding">
+                        {$rockfrontend->render("/sections/includes/gallery.latte")}
+                    </div>
+                </div>
+            {else}
+                <div class="uk-width-1-1">
+                    {if $page->gallery->count == 1}
+                        <div class="uk-width-2-3 uk-margin-xlarge-left uk-margin-bottom uk-visible@m">
+                            <img src="{$page->gallery->first->url}" alt="{$page->gallery->first->title}" uk-img>
+                        </div>
+                    {/if}
+                </div>
+            {/if}
+        {/if}
+
+        
+    </div>
+    
+</section>
+
+<section id="offline-world">
+    <div class="uk-width-1-1" uk-height-viewport="expand: true" uk-grid >
+        <div class="uk-width-1-1">
+            <div class="uk-width-4-5@m" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
+                <div class="uk-width-1-1 uk-padding uk-padding-remove-bottom">
+                    <h1>You're Offline &nbsp; ᘳ❍ ͟ʖ❍ᘰ</h1>
+                    <h2>Don't panic 😱 <span style="color: blue;">Go outside</span> ⛅️ <span style="color: green;">Touch grass</span> 🌾 Read a book printed on paper 📖</h2>
+                    
+                    <p>Here are some recent books I've read that I recommend:</p>
+                    <ul>
+                        <li>The Art of Memory</li>
+                        <ul class="uk-margin-remove">
+                            <li>Frances Yates (1966)</li>
+                        </ul>
+                        <li>The Sacred Path of the Warrior</li>
+                        <ul class="uk-margin-remove">
+                            <li>Chögyam Trungpa (1984)</li>
+                        </ul>
+                        <li>The Wayfinders · Why Ancient Wisdom Matters in the Modern World</li>
+                            <ul class="uk-margin-remove">
+                                <li>Wade Davis (2009)</li>
+                            </ul>
+                        <li>The Undiscovered Self</li>
+                            <ul class="uk-margin-remove">
+                                <li>Carl Gustav Jung (1958)</li>
+                            </ul>
+                        <li>The Sorrows of Young Werther</li>
+                            <ul class="uk-margin-remove">
+                                <li>Johann Wolfgang von Goethe (1774)</li>
+                            </ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
