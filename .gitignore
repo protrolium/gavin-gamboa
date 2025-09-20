@@ -4,8 +4,14 @@
 # Ignore files related to API keys
 .env
 
-# Ignore config.php database information
+# Ignore config.php database information etc
 site/config.php
+
+# Ignore root files
+.htaccess
+index.php
+CONTRIBUTING.md
+composer.json
 
 # Ignore sessions / logs
 site/assets/cache/
@@ -18,6 +24,7 @@ site/templates/src/
 site/templates/errors/
 
 # Ignore certain template files
+site/templates/.htaccess
 site/templates/admin.php
 site/templates/default-page.php
 site/templates/home.php
