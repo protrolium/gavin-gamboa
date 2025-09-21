@@ -181,8 +181,8 @@ $subscribeOptions = array(
 	'submitFieldLabel' => __('➩'),
 
 	// success messages
-	'successEmailSent' => __('Thank you! A confirmation email has been sent to your inbox.'),
-	'successConfirmed' => __('Your subscription has been confirmed. My newsletter is low-frequency and it is self-hosted, which means that your inbox will not be cluttered, and your email addresses will not be sent via—nor sold to—a third party, ever. Thank you for your support.'),
+	'successEmailSent' => __('EMAIL-SENT'),
+	'successConfirmed' => __('SUBSCRIPTION-CONFIRMED'),
 
 	// error messages
 	'errorListUnknown' => __('Unknown mailing list'),
@@ -240,6 +240,16 @@ $unsubscribeOptions = array(
 	'confirmMessage' => __('Please confirm that you want to unsubscribe from “{list}”.'),
 );
 
+/****************************************************************************************************
+ * STRING TOKENS SETTINGS
+ * 
+ */
+
+$replacements = [
+	'EMAIL-SENT' => '<p>Thank you! A confirmation email has been sent to your inbox.</p>',
+    'SUBSCRIPTION-CONFIRMED' => '<h1>Your subscription has been confirmed.</h1> <h2>My newsletter is low-frequency and it is self-hosted, which means that your inbox will not be cluttered, and your email addresses will not be sent via—nor sold to—a third party, ever.</h2> <h3>Thank you for your support.</h3>'
+];
+
 /*************************************************************************************************************
  * EXECUTE 
  * 
@@ -265,6 +275,9 @@ if($input->get('webhook') && !$isInclude) {
 	// subscribe 
 	$out = $promailer->forms->subscribe($subscribeOptions);
 }
+
+// update string tokens
+$out = str_replace(array_keys($replacements), array_values($replacements), $out);
 
 // if this file was included from another, we echo the output now, otherwise we go to MAIN OUTPUT
 if($isInclude): echo $out; else: 
