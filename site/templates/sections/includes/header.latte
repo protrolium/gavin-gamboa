@@ -88,8 +88,8 @@
                 {foreach $navItems as $item}
                     <li n:class="$rockfrontend->isActive($item) ? uk-active, uk-text-large, offcanvas-mobile"
                         style="list-style:none;">
-                        {if $item == $home}
-                            <a class="uk-text-secondary" href="{$item->url}">Home</span></a>
+                        {if $item == $pages->get('name=wiki')}
+                            <a class="noExternalSVG uk-text-secondary" href="https://gavart.ist/" target="_blank">Wiki</span></a>
                         {else}
                             <a class="uk-text-secondary" href="{$item->url}">{$item->title}</span></a>
                         {/if}
