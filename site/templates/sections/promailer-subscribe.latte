@@ -1,5 +1,20 @@
 <section>
-    <div class="uk-padding" uk-height-viewport="expand: true">
-        {$rockfrontend->render("promailer-subscribe.php")}
-    </div>
+
+    {var $requestUri = $_SERVER['REQUEST_URI']}
+    {var $isNewsletterPage = ($requestUri === '/gavin-gamboa/newsletter' || $requestUri === '/gavin-gamboa/newsletter/')}
+    
+    {if $isNewsletterPage}
+        <div class="uk-padding" uk-height-viewport="expand: true">
+            <h2>You can sign up for my newsletter using the form below</h2>
+            {$rockfrontend->render("promailer-subscribe.php")}
+        </div>
+
+    {else}
+
+        <div class="uk-padding" uk-height-viewport="expand: true">
+            {$rockfrontend->render("promailer-subscribe.php")}
+        </div>
+
+    {/if}
+
 </section>
