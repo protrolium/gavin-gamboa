@@ -1,7 +1,12 @@
 <section>
 
+    {var $currentUrl = $page->url}
     {var $requestUri = $_SERVER['REQUEST_URI']}
-    {var $isNewsletterPage = ($requestUri === '/gavin-gamboa/newsletter' || $requestUri === '/gavin-gamboa/newsletter/')}
+    {var $isLocalhost = ($config->httpHost === 'localhost:8888')}
+    {var $hasQueryParams = (strpos($requestUri, '?') !== false)}
+    {var $isNewsletterPage = !$hasQueryParams && ($isLocalhost ? 
+        ($currentUrl === '/gavin-gamboa/newsletter' || $currentUrl === '/gavin-gamboa/newsletter/') : 
+        ($currentUrl === '/newsletter' || $currentUrl === '/newsletter/'))}
     
     {if $isNewsletterPage}
         <div class="uk-padding" uk-height-viewport="expand: true">
@@ -10,7 +15,7 @@
         </div>
 
     {else}
-
+    
         <div class="uk-padding" uk-height-viewport="expand: true">
             {$rockfrontend->render("promailer-subscribe.php")}
         </div>
