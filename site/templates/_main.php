@@ -62,7 +62,7 @@ $home = $pages->get('/'); // homepage directory
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- <title><?php echo ($page->name == 'home' ? $page->title : $page->title . ' — ' . $home->title); ?></title> -->
 		<!-- <meta name="description" content=""> -->
-		<meta name="keywords" content="gavin gamboa, gavcloud, pianist, composer, mexican american,software, developer, wiki, film music, website, visual art, portfolio, piano, classical music, jazz music, experimental music, music composition, music production, music theory, music performance, music education, music technology">
+		<meta name="keywords" content="gavin gamboa, gavcloud, pianist, composer, mexican american, software, developer, wiki, film music, website, visual art, portfolio, piano, classical music, jazz music, experimental music, music composition, music production, music theory, music performance, music education, music technology">
 		<meta name="generator" content="ProcessWire">
 
 		<!-- fonts -->
