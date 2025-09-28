@@ -21,8 +21,9 @@
                         class="uk-padding-small uk-padding-remove-top uk-padding-remove-left uk-text-muted"
                         uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
                         
-                        {* don't show date on about page *}
-                        {if $page->name != "about"}  
+                        {* don't show date on about | support pages *}
+                        {var $excludePages = ["about", "support"]}
+                        {if !in_array($page->name, $excludePages)}  
                             <div class="uk-flex uk-flex-middle">
                                 <span class="text-light hover-icon" uk-icon="icon: clock; ratio: 0.8"></span>
                                 &nbsp;
@@ -72,34 +73,6 @@
         {/if}
 
     </div>
-
-    {* show ProcessWire and last updated timestamp *}
-    {if $page->name = "about"}
-        <div 
-            class="uk-padding uk-padding-remove-top uk-padding-remove-bottom" 
-            uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 1250; repeat: false;">
-
-            <div style="uk-text-small">
-                
-                    site made with 
-                
-                <span style="display: inline-block; width:15px;">
-                    {$pages->get("name=processwire, template=image")->markup|noescape}
-                </span>
-
-                <a class="noExternalSVG uk-text-secondary" href="https://processwire.com/" target="_blank">ProcessWire</a> 
-                
-                {* Get the most recently modified page *}
-                {var $latestPage = $pages->find("sort=-modified, limit=1")->first()}
-                
-                <br>
-                
-                    last updated: {date('Y F j H:i:s', $latestPage->modified)}
-
-            </div>
-            &nbsp;
-        </div>
-    {/if}
     
 </section>
 
