@@ -290,6 +290,15 @@ a.noExternalSVG::after {
     text-underline-offset: 4px;
 }
 
+// Mobile background image positioning using ProcessWire focus
+@media (max-width: 767px) {
+    .home-background {
+        background-position-x: var(--focus-x) !important;
+        background-position-y: var(--focus-y) !important;
+        background-size: auto 100% !important; // Adjust this value to control zoom level
+    }
+}
+
 // @media (min-width: 768px) {
 //     .social-icons-grid {
 //         // grid-template-columns: repeat(14, 1fr);
