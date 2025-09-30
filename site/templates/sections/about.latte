@@ -4,14 +4,15 @@
         {$rockfrontend->render("/sections/default-page.latte")}
     </div>
 
-    {* show ProcessWire and last updated timestam on /about page *}
+    {* show ProcessWire and last updated timestamp on /about page *}
+
     <div 
         class="uk-padding uk-padding-remove-top uk-padding-remove-bottom" 
         uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 1250; repeat: false;">
 
         <div style="uk-text-small">
             
-            site made with 
+            Site made with 
             
             <span style="display: inline-block; width:15px;">
                 {$pages->get("name=processwire, template=image")->markup|noescape}
@@ -24,7 +25,11 @@
             
             <br>
             
-            last updated: {date('Y F j H:i:s', $latestPage->modified)}
+            Last updated: {date('Y F j H:i:s', $latestPage->modified)}
+
+            <br>
+
+            Julia set graphic by <a class="noExternalSVG uk-text-secondary" href="https://www.benjaminolsen.xyz/" alt="" target="_blank">Ben Olsen</a>
 
         </div>
 
