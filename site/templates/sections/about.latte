@@ -1,4 +1,4 @@
-<section>
+<section uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
     <div class="uk-width-1-1 uk-padding-remove-top uk-padding-remove-bottom">    
         {* render the default-page *}
         {$rockfrontend->render("/sections/default-page.latte")}
@@ -7,8 +7,7 @@
     {* show ProcessWire and last updated timestamp on /about page *}
 
     <div 
-        class="uk-padding uk-padding-remove-top uk-padding-remove-bottom" 
-        uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 500; repeat: false;">
+        class="uk-padding uk-padding-remove-top uk-padding-remove-bottom">
 
         <div style="uk-text-small">
             
@@ -21,21 +20,17 @@
             <a class="noExternalSVG uk-text-secondary" href="https://processwire.com/" target="_blank">ProcessWire</a> 
 
             <br>
-
-            Set in 
-            
-            <a class="noExternalSVG uk-text-secondary" href="https://www.tunera.xyz/fonts/nyght-serif/" target="_blank">
-                Nyght Serif
-            </a> 
-            
-            designed by Maksym Kobuzan
-            
             {* Get the most recently modified page *}
             {var $latestPage = $pages->find("sort=-modified, limit=1")->first()}
             
+            Updated on {date('Y F j H:i:s', $latestPage->modified)}
+
             <br>
+
+            Set in <a class="noExternalSVG uk-text-secondary" href="https://www.tunera.xyz/fonts/nyght-serif/" target="_blank">
+                Nyght Serif </a> by Maksym Kobuzan
             
-            Last updated: {date('Y F j H:i:s', $latestPage->modified)}
+            
 
             <br>
 
