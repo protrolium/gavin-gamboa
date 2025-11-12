@@ -48,11 +48,13 @@
                     
                     {* add home + children pages to navItems *}
                     {var $navItems = new \ProcessWire\PageArray()}
-                    {* {do $navItems->add($home)} *}
                     
                     {foreach $home->children() as $children}
                         {do $navItems->add($children)}
                     {/foreach}
+                    
+                    {* manually add the hidden wiki page *}
+                    {do $navItems->add($pages->get('name=wiki'))}
                     
                     {* build the menu *}
                     {foreach $navItems as $item}
