@@ -74,15 +74,23 @@ if($input->get('type') === 'html') { ?>
 		<style type='text/css'>
 			body {
 				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+				width: 600px;
+				-webkit-text-size-adjust: 100%;
+				-ms-text-size-adjust: 100%; 
 			}
 			a {
 				color: #e83561;
 			}
 			h1 {
-				background: #2480e6;
-				padding: 20px 30px;
+				background:rgb(0, 0, 0);
+				padding: 20px 15px;
 				color: #fff;
 				margin: 0;
+				font-size: 18px;
+			}
+			img {
+				max-width: 600px;
+				height: auto;
 			}
 			footer {
 				border-top: 1px solid #ccc;
@@ -92,11 +100,22 @@ if($input->get('type') === 'html') { ?>
 			}
 		</style>
 	</head>
-	<body>
-		<h1><?=$page->title?></h1>
+	<body style="width: 600px;">
+		<h1>Gavin Gamboa • Newsletter</h1>
 		<?=$page->get('body')?>
 		<footer>
-			<a href='{unsubscribe_url}'>Click here to unsubscribe</a>
+			<h4 style="margin-bottom: 2px;">Gavin Gamboa</h4>
+			<span><em>composer · creative technologist</em></span>
+			<br>
+			<?php 
+				$juliaImage = $pages->get('name=julia-set-001, template=image');
+				if($juliaImage->id && $juliaImage->featured_image->first) {
+					echo '<img src="' . $juliaImage->featured_image->first->url . '" width="100" alt="">';
+				}
+			?>
+			<br>
+			<a href="https://gav.cloud">Bandcamp</a> • <a href="https://youtube.com/@gavcloud">YouTube</a> • <a href="https://instagram.com/gavcloud">Instagram</a> • <a href="https://sonomu.club/@gavcloud">Mastodon</a> • <a href="https://bsky.app/profile/gav.cloud">Bluesky</a> • <a href="https://gavart.ist">Wiki</a>
+			<h4 style="margin-top: 2px;">Newsletter <a href='{unsubscribe_url}'>Unsubscribe</a></h4>
 		</footer>
 	</body>
 	</html>
