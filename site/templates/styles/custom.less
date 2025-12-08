@@ -294,6 +294,36 @@ a.noHover:hover {
     text-underline-offset: 4px;
 }
 
+.siteCredit {
+	width: auto;
+	display: flex;
+	align-items: center;
+	margin-right: 5px;
+    padding-bottom: 10px;
+}
+
+.siteCredit .uk-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: flex-start;
+	min-width: 46.875px; // Ensures consistent width for all SVG containers (37.5px * 1.25)
+	flex-shrink: 0;
+	margin-right: 15px; // Replaces &nbsp;&nbsp; spacing
+}
+
+.siteCredit .uk-icon svg {
+	width: auto;
+	height: auto;
+	max-width: 30px; // 37.5px * 1.25 (additional 25% increase)
+	max-height: 30px; // 37.5px * 1.25 (additional 25% increase)
+}
+
+.siteCreditText { 
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 1.5625em; // 1.25em * 1.25 (additional 25% increase in text size)
+}
+
 // Mobile background image positioning using ProcessWire focus
 @media (max-width: 767px) {
     .home-background {
