@@ -24,7 +24,7 @@
                         uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
                         
                         {* don't show date on about | support pages *}
-                        {var $excludePages = ["about", "support"]}
+                        {var $excludePages = ["about", "support", "music"]}
                         {if !in_array($page->name, $excludePages)}  
                             <div class="uk-flex uk-flex-middle">
                                 <span class="text-light hover-icon" uk-icon="icon: clock; ratio: 0.8"></span>
