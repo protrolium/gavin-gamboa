@@ -30,3 +30,8 @@ if ($config->rockdevtools) {
         ->add('/site/templates/scripts/consenty.min.js')
         ->save('/site/templates/dst/scripts.min.js');
   }
+
+// render FormBuilder form and get the styles and scripts
+$form = $forms->render('contact-form');
+$formStyles = $form->styles;
+$formScripts = $form->scripts;

@@ -57,6 +57,9 @@ $home = $pages->get('/'); // homepage directory
 		<!-- add our styles and scripts -->
 		<?= $rockfrontend->styleTag($config->urls->templates . "dst/styles.min.css") ?>
 		<?= $rockfrontend->scriptTag($config->urls->templates . "dst/scripts.min.js") ?>
+
+		<!-- load FormBuilder styles -->
+		<?php if (!empty($formStyles)): ?><?= $formStyles ?><?php endif; ?>
 		
 		<!-- make sure we get styling on mobile by setting meta viewport -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -101,7 +104,9 @@ $home = $pages->get('/'); // homepage directory
 				}, 50);
 			});
 		</script>
-
+		
+		<!-- load FormBuilder scripts -->
+		<?php if (!empty($formScripts)): ?><?= $formScripts ?><?php endif; ?>
 		<!-- scripts for once DOM is loaded -->
 		<script type="text/javascript" src="<?php echo $config->urls->templates?>scripts/onload.js" defer></script>
 		<!-- mastodon verification -->
