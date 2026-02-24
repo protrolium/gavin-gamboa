@@ -31,7 +31,8 @@ if ($config->rockdevtools) {
         ->save('/site/templates/dst/scripts.min.js');
   }
 
-// render FormBuilder form and get the styles and scripts
+// render FormBuilder form once — avoid double render (double emails)
 $form = $forms->render('contact-form');
 $formStyles = $form->styles;
 $formScripts = $form->scripts;
+wire()->set('contactFormHtml', (string) $form); // expose to Latte via wire fuel
