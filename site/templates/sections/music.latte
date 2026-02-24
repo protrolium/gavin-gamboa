@@ -1,6 +1,6 @@
-<section uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
+<section>
     <div class="uk-width-1-1 uk-padding-remove-top uk-padding-remove-bottom">    
-        <div class="uk-width-4-5@m" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
+        <div class="uk-width-4-5@m uk-height-viewport" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
 
             {if $page??->featured_image??->first}
                 {if $page->enable_featured_image == true}
@@ -17,9 +17,13 @@
                 <h1 style="line-height:1em;">{$page->title|noescape}</h1>
             </div>
         
-            <div class="uk-padding uk-padding-remove-bottom uk-padding-remove-top uk-grid" uk-height-viewport="expand: true">
+            <div 
+                class="uk-padding uk-padding-remove-bottom uk-padding-remove-top uk-grid" 
+                uk-height-viewport="expand: true"
+                uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
 
                 <div class="uk-width-1-3@m uk-padding uk-padding-remove-bottom">
+                    
                     <h2 class="uk-text-muted">Releases</h2>
                 
                     <div class="siteCredit">
@@ -122,16 +126,25 @@
                     
                 </div>
 
-                <div class="uk-width-1-1 uk-padding uk-padding-remove-bottom uk-margin-large-bottom">    
-                {* render the repeater matrix *}
-                <span>{$page->repeater_matrix[0]->body|noescape}</span>
-                <span class="uk-text-muted">{$page->repeater_matrix[0]->author|noescape}</span>
+                <div class="uk-width-1-1 uk-padding uk-padding-remove-bottom">    
+                    {* render the repeater matrix *}
+                    <span>{$page->repeater_matrix[0]->body|noescape}</span>
+                    <span class="uk-text-muted">{$page->repeater_matrix[0]->author|noescape}</span>
+                </div>
             </div>
-
-            </div>
-
-
 
         </div>
+
+        {* render the repeater matrix videos *}
+        <div class="uk-width-1-1 uk-padding" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;" uk-grid>
+            {foreach $page->repeater_matrix as $item}
+                {if $item->type == "video_embed_repeater"}
+                    <div class="uk-margin-top">
+                        {$item->video_embed|noescape}
+                    </div>
+                {/if}
+            {/foreach}
+        </div>
+        
     </div>
 </section>

@@ -17,6 +17,36 @@
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
+
+/* Contact form: monospace input fields only */
+.contact-form .FormBuilder input,
+.contact-form .FormBuilder textarea,
+.contact-form .FormBuilder select {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Prevent browser autofill from forcing mismatched colors (email field often affected) */
+.FormBuilder input:-webkit-autofill,
+.FormBuilder input:-webkit-autofill:hover,
+.FormBuilder input:-webkit-autofill:focus,
+.FormBuilder textarea:-webkit-autofill,
+.FormBuilder textarea:-webkit-autofill:hover,
+.FormBuilder textarea:-webkit-autofill:focus,
+.FormBuilder select:-webkit-autofill,
+.FormBuilder select:-webkit-autofill:hover,
+.FormBuilder select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-color);
+  caret-color: var(--text-color);
+  box-shadow: 0 0 0 1000px var(--component-bg-color) inset;
+  transition: background-color 999999s ease-in-out 0s;
+}
+
+.FormBuilder input:-moz-autofill,
+.FormBuilder textarea:-moz-autofill,
+.FormBuilder select:-moz-autofill {
+  box-shadow: 0 0 0 1000px var(--component-bg-color) inset;
+  -moz-text-fill-color: var(--text-color);
+}
 .FormBuilder :focus-visible {
   border-radius: 0;
 }

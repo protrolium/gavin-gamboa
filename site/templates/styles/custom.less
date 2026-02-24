@@ -279,6 +279,35 @@ a.noHover:hover {
     border-radius: 0rem;
 }
 
+// footer newsletter subscribe form (ProMailer)
+#promailer-form {
+    label {
+        color: var(--text-color);
+    }
+
+    input[type="email"] {
+        background-color: var(--component-bg-color);
+        color: var(--text-color);
+        border: 1px solid var(--text-color);
+        outline: none;
+    }
+
+    input[type="email"]::placeholder {
+        color: var(--uk-text-secondary);
+        opacity: 0.8;
+    }
+
+
+    input[type="email"]:-webkit-autofill,
+    input[type="email"]:-webkit-autofill:hover,
+    input[type="email"]:-webkit-autofill:focus {
+        -webkit-text-fill-color: var(--text-color);
+        caret-color: var(--text-color);
+        box-shadow: 0 0 0 1000px var(--component-bg-color) inset;
+        transition: background-color 999999s ease-in-out 0s;
+    }
+}
+
 .social-icons-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
