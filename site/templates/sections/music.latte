@@ -141,6 +141,7 @@
         {* render the repeater matrix videos *}
         <div 
             class="uk-width-1-1 uk-padding uk-padding-remove-right uk-padding-remove-bottom uk-margin-large-bottom"
+            uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 600; repeat: false;"
             uk-grid>
             
             {foreach $page->repeater_matrix as $item}

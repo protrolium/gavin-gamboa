@@ -95,13 +95,27 @@ if($input->get('type') === 'html') { ?>
 			footer {
 				border-top: 1px solid #ccc;
 				font-size: smaller;
-				margin-top: 30px;
-				padding-top: 15px;
+				margin-top: 18px;
+				padding-top: 5px;
+			}
+			blockquote {
+				border-left: 4px solid rgb(232 226 53);
+				margin: 0.5em 1em;
+				padding: 0px 15px;
+				color:rgb(100, 100, 100);
+				font-size: 16px;
+			}
+			p:has(> img:only-child), p:has(> a:only-child > img) {
+				margin: 0;
+				padding: 0;
+				line-height: 0;
 			}
 		</style>
 	</head>
 	<body style="width: 600px;">
-		<h1>Gavin Gamboa • Newsletter</h1>
+		<h1><span style="font-weight: 400;">Gavin Gamboa Newsletter</span> 
+		<br>
+		<strong><?=$page->title?></strong></h1>
 		<?=$page->get('body')?>
 		<footer>
 			<h4 style="margin-bottom: 2px;">Gavin Gamboa</h4>
@@ -114,7 +128,13 @@ if($input->get('type') === 'html') { ?>
 				}
 			?>
 			<br>
-			<a href="https://gav.cloud">Bandcamp</a> • <a href="https://youtube.com/@gavcloud">YouTube</a> • <a href="https://instagram.com/gavcloud">Instagram</a> • <a href="https://sonomu.club/@gavcloud">Mastodon</a> • <a href="https://bsky.app/profile/gav.cloud">Bluesky</a> • <a href="https://gavart.ist">Wiki</a>
+			<a href="https://gav.cloud">Bandcamp</a> • 
+			<a href="https://alpha.subvert.fm/gavin-gamboa">Subvert</a> • 
+			<a href="https://youtube.com/@gavcloud">YouTube</a> • 
+			<a href="https://sonomu.club/@gavcloud">Mastodon</a> • 
+			<a href="https://bsky.app/profile/gav.cloud">Bluesky</a> • 
+			<a href="https://instagram.com/gavcloud">Instagram</a> • 
+			<a href="https://gavart.ist">Wiki</a>
 			<h4 style="margin-top: 2px;">Newsletter <a href='{unsubscribe_url}'>Unsubscribe</a></h4>
 		</footer>
 	</body>
