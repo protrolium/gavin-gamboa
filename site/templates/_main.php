@@ -85,6 +85,12 @@ $home = $pages->get('/'); // homepage directory
 		<?php $metadata = $modules->get('MarkupMetadata');?>
 		<?php echo $metadata->render();?>
 
+		<!-- rss -->
+		<link rel="alternate" type="application/rss+xml" title="Gavin Gamboa · Newsletter RSS Feed" href="<?= $pages->get('/rss/')->url ?>" />
+
+		<!-- mastodon verification -->
+		<link rel="me" href="https://sonomu.club/@gavcloud" />
+
 	</head>
 	<body id="html-body">
 
