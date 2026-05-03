@@ -59,9 +59,12 @@
 if(!defined("PROCESSWIRE")) die();
 
 /** @var Page $page */
+/** @var Pages $pages */
 /** @var WireInput $input */
 /** @var Sanitizer $sanitizer */
 /** …and all the other ProcessWire API variables */
+
+require_once __DIR__ . '/scripts/email-body-inline-styles.php';
 
 // HTML email output
 if($input->get('type') === 'html') { ?>
@@ -74,7 +77,11 @@ if($input->get('type') === 'html') { ?>
 		<style type='text/css'>
 			body {
 				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-				width: 600px;
+				width: 100%;
+				max-width: 600px;
+				margin: 0 auto;
+				padding: 0 16px;
+				box-sizing: border-box;
 				-webkit-text-size-adjust: 100%;
 				-ms-text-size-adjust: 100%; 
 			}
@@ -82,15 +89,12 @@ if($input->get('type') === 'html') { ?>
 				color: #e83561;
 			}
 			h1 {
-				background:rgb(0, 0, 0);
+				background-color: #000;
 				padding: 20px 15px;
 				color: #fff;
 				margin: 0;
-				font-size: 18px;
-			}
-			img {
-				max-width: 600px;
-				height: auto;
+				font-size: 28px;
+				font-weight: 200;
 			}
 			footer {
 				border-top: 1px solid #ccc;
@@ -99,10 +103,14 @@ if($input->get('type') === 'html') { ?>
 				padding-top: 5px;
 			}
 			blockquote {
-				border-left: 4px solid rgb(232 226 53);
+				border-left: 4px solid darkgray;
 				margin: 0.5em 1em;
 				padding: 0px 15px;
 				color:rgb(100, 100, 100);
+				font-size: 16px;
+			}
+			p {
+				line-height: 1.8em;
 				font-size: 16px;
 			}
 			p:has(> img:only-child), p:has(> a:only-child > img) {
@@ -112,30 +120,70 @@ if($input->get('type') === 'html') { ?>
 			}
 		</style>
 	</head>
-	<body style="width: 600px;">
-		<h1><span style="font-weight: 400;">Gavin Gamboa Newsletter</span> 
-		<br>
-		<strong><?=$page->title?></strong></h1>
-		<?=$page->get('body')?>
+	<body style="width: 100%; max-width: 600px; margin: 0 auto; padding: 0 16px; box-sizing: border-box;">
+		<h1 style="background-color: #000; padding: 20px 15px; color: #fff; margin: 0; font-size: 28px; font-weight: 200;">
+			<span style="font-weight: 200; text-transform: uppercase;">Gavin Gamboa</span>
+			<span style="font-size: 14px; font-weight: 400; color:darkgray; text-transform: uppercase;">Newsletter</span>
+			<span style="display: block; font-size: 14px; font-weight: 400; color:darkgray; line-height: 0.6em; margin: 0 0 7px 0;">
+				<br>
+				<span style="text-transform: capitalize; color:darkgray;">composer · creative technologist</span>
+			</span>
+			<span style="color:thistle; font-weight: 700;"><strong><?=$page->title?></strong></span>
+			<span style="display: block; font-size: 12px; color: #fff; font-weight: 300; line-height: 0.75em;">
+				<br>
+				Bulletin • <strong><?=date('Y F j', $page->modified)?></strong> → Los Angeles • Issue 1
+			</span>
+		</h1>
+
+		<?php if($page->hasField('featured_image') && $page->featured_image->first): $fi = $page->featured_image->first; ?>
+			<p style="margin:0;padding:0;line-height:0;">
+				<img src="<?=$fi->url?>" width="600" alt="<?=$sanitizer->entities($fi->description)?>" style="width: 100%; max-width: 600px; height: auto; display: block;">
+			</p>
+		<?php endif; ?>
+		
+		<!-- force the browser view url to be HTML markup version of the page -->
+		<?php
+			$browserViewUrl = $page->httpUrl;
+			$browserViewUrl .= (strpos($browserViewUrl, '?') === false ? '?' : '&') . 'type=html&preview=1';
+		?>
+		<!-- display links to browser view and RSS feed -->
+		<p style="font-size: 12px;">view this message in the 
+			<a style="color: #e83561;" href="<?=$sanitizer->entities($browserViewUrl)?>" target="_blank">browser</a>
+			· or subscribe via 
+			<a style="color: #e83561;" href="https://gavingamboa.net/rss/" target="_blank">RSS</a></p>
+		
+		<!-- <?=$page->get('body')?> original body code -->
+		<?= promailerEmailInlineBodyHtml($page->get('body')) ?>
+		
 		<footer>
-			<h4 style="margin-bottom: 2px;">Gavin Gamboa</h4>
+			<h4 style="margin-bottom: 2px;">Gavin Gamboa · <a style="color: #e83561;" href="https://gavingamboa.net" target="_blank">website</a> · <a style="color: #e83561;"href="https://gavart.ist" target="_blank">wiki</a></h4>
 			<span><em>composer · creative technologist</em></span>
 			<br>
 			<?php 
 				$juliaImage = $pages->get('name=julia-set-001, template=image');
 				if($juliaImage->id && $juliaImage->featured_image->first) {
-					echo '<img src="' . $juliaImage->featured_image->first->url . '" width="100" alt="">';
+					$juliaUrl = $juliaImage->featured_image->first->url;
+					echo '<img src="' . $sanitizer->entities($juliaUrl) . '" width="100" alt="" style="width: 100px; max-width: 100px; height: auto; display: block;">';
 				}
 			?>
 			<br>
-			<a href="https://gav.cloud">Bandcamp</a> • 
-			<a href="https://alpha.subvert.fm/gavin-gamboa">Subvert</a> • 
-			<a href="https://youtube.com/@gavcloud">YouTube</a> • 
-			<a href="https://sonomu.club/@gavcloud">Mastodon</a> • 
-			<a href="https://bsky.app/profile/gav.cloud">Bluesky</a> • 
-			<a href="https://instagram.com/gavcloud">Instagram</a> • 
-			<a href="https://gavart.ist">Wiki</a>
-			<h4 style="margin-top: 2px;">Newsletter <a href='{unsubscribe_url}'>Unsubscribe</a></h4>
+			<a style="color: #e83561;" href="https://gav.cloud">Bandcamp</a> • 
+			<a style="color: #e83561;" href="https://alpha.subvert.fm/gavin-gamboa">Subvert</a> • 
+			<a style="color: #e83561;" href="https://youtube.com/@gavcloud">YouTube</a> 
+			<br>
+			<a style="color: #e83561;" href="https://sonomu.club/@gavcloud">Mastodon</a> • 
+			<a style="color: #e83561;" href="https://bsky.app/profile/gav.cloud">Bluesky</a> • 
+			<a style="color: #e83561;" href="https://instagram.com/gavcloud">Instagram</a>
+			<br>
+			&nbsp;
+			<br>
+			<a style="color: #e83561;" href="https://tonestrukt.org" target="_blank">Tonestrukt Editions</a> • Managing Editor
+			<br>
+			<a style="color: #e83561;" href="https://teachingmachine.tv" target="_blank">The Teaching Machine</a> • Creative Director
+			<br>
+			<a style="color: #e83561;" href="https://strangeloop-studios.com" target="_blank">Strangeloop Studios</a> • Content Operative
+			<br>
+			<h4 style="margin-top: 2px;">Newsletter <a style="color: #e83561;" href='{unsubscribe_url}'>Unsubscribe</a></h4>
 		</footer>
 	</body>
 	</html>
