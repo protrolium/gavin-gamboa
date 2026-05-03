@@ -3,6 +3,7 @@
 if(!defined("PROCESSWIRE")) die();
 
 /** @var Wire $wire */
+/** @var Page $page */
 
 /**
  * ProcessWire Bootstrap API Ready
@@ -13,6 +14,13 @@ if(!defined("PROCESSWIRE")) die();
  * copy of all ProcessWire API variables.
  *
  */
+
+// RSS template: raw XML only (no _init / _main). Page must use template name "rss".
+$p = wire('page');
+if ($p && $p->id && $p->template->name === 'rss') {
+	wire('config')->appendTemplateFile = '';
+	wire('config')->prependTemplateFile = '';
+}
 
 // ─── TIDDLYWIKI IMPORT TAB ───────────────────────────────────────────────────
 //
@@ -109,7 +117,8 @@ function nli_adminTabHtml(int $pageId): string {
 /* suppress save buttons rendered inside the fields list, keep the header bar */
 #tw_import ul.Inputfields .InputfieldSubmit { display:none !important; }
 /* hide redundant Publish / Save+Keep Unpublished in form body (header versions stay) */
-.Inputfields .InputfieldSubmit:has(#submit_publish),
+.Inputfields .InputfieldSubmit:has(#submit_publish), 
+.Inputfields .InputfieldSubmit:has(#submit_save),
 .Inputfields .InputfieldSubmit:has(#submit_save_unpublished) { display:none !important; }
 #tw-import textarea { width:100%; font-family:monospace; font-size:13px; padding:8px; margin:6px 0 12px; box-sizing:border-box; }
 #tw-import .tw-row  { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:10px 0; }
@@ -117,7 +126,7 @@ function nli_adminTabHtml(int $pageId): string {
 </style>
 
 <div id="tw-import">
-  <p>Paste one TiddlyWiki tiddler URL per line. Images will be added to this page's gallery and newsletter body HTML will be generated via Claude.</p>
+  <p>Paste one TiddlyWiki tiddler URL per line. Images will be added to this page's gallery and newsletter body HTML will be generated via Claude. To view changes in Content tab, this page must be force refreshed in the browser.</p>
 
   <label for="tw-urls"><strong>Tiddler URLs</strong></label>
   <textarea id="tw-urls" rows="8" placeholder="https://gavart.ist/#Tiddler%20Title"></textarea>
