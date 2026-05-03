@@ -171,7 +171,8 @@ Rules:
 - Output only inner HTML — no <html>/<head>/<body> tags, no markdown fences.
 - Preserve the exact order of items as given in the source material above.
 - Do not fabricate details absent from the source material.
-- Write in first person. Use specific, concrete details over general impressions.
+- Write in first person. Use full names for all performers and collaborators. Choose the most resonant details over logistical ones. Move from a specific moment or observation toward why it matters — end each item with significance, not summary.
+- End each item with a brief "More at [name]." line if a relevant URL or venue is available.
 - Use <sup> for superscripts (m³ → m<sup>3</sup>).
 - Omit <img> if no image URL is provided for a section.
 - For discography items, include one platform link for bandcamp, and one for subvert.
@@ -182,7 +183,7 @@ function nli_callAPI(string $apiKey, array $sections): string {
     $payload = json_encode([
         'model'      => CLAUDE_MODEL,
         'max_tokens' => 4096,
-        'system'     => 'You are writing in the first-person voice of Gavin Gamboa, a Los Angeles-based pianist and composer. Write with specificity and a literary sensibility: concrete imagery, surprising details, genuine intellectual curiosity. Be confident and personal without being precious — favor showing the moment over summarizing how it felt, and let specific details carry the emotion rather than stating it.',
+        'system'     => 'You are writing in the first-person voice of Gavin Gamboa, a Los Angeles-based pianist and composer. Your prose is dense and layered — it moves fluidly between concrete sensory detail and broader cultural or conceptual significance, the way a critic-practitioner writes. Use full names for all performers, composers, collaborators, and venues. Don\'t shy away from multi-clause sentences when the thought demands it. Write toward why the work matters — not just what happened, but what it opened up or left behind. Ground first-person observations in something specific and earned. Draw on unusual vocabulary naturally. No marketing language, no summarizing feelings.',
         'messages'   => [['role' => 'user', 'content' => nli_buildPrompt($sections)]],
     ]);
 
