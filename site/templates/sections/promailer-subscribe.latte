@@ -1,25 +1,49 @@
-<section>
+<section uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 750; repeat: false;">
 
-    {var $currentUrl = $page->url}
-    {var $requestUri = $_SERVER['REQUEST_URI']}
-    {var $isLocalhost = ($config->httpHost === 'localhost:8888')}
-    {var $hasQueryParams = (strpos($requestUri, '?') !== false)}
-    {var $isNewsletterPage = !$hasQueryParams && ($isLocalhost ? 
-        ($currentUrl === '/gavin-gamboa/newsletter' || $currentUrl === '/gavin-gamboa/newsletter/') : 
-        ($currentUrl === '/newsletter' || $currentUrl === '/newsletter/'))}
+    {var $hasQueryParams = (strpos($_SERVER['REQUEST_URI'], '?') !== false)}
+    {var $isNewsletterPage = !$hasQueryParams && ($page->name == 'newsletter')}
+
     
     {if $isNewsletterPage}
-        <div class="uk-padding" uk-height-viewport="expand: true">
-            <h2>You can sign up for my newsletter using the form below.</h2>
+        <div class="uk-padding uk-padding-remove-bottom"> <!-- uk-height-viewport="expand: true -->
+            {if $user->language->name == 'spanish'}
+                <h2>Puedes suscribirte a mi boletín utilizando el formulario de abajo.</h2>
+            {else}
+                <h2>You can sign up for my newsletter using the form below.</h2>
+            {/if}
             {$rockfrontend->render("promailer-subscribe.php")}
         </div>
 
     {else}
     
-        <div class="uk-padding" uk-height-viewport="expand: true">
+        <div class="uk-padding">
             {$rockfrontend->render("promailer-subscribe.php")}
         </div>
 
     {/if}
+
+    <hr class="uk-divider-icon">
+
+    <div class="uk-width-1-1 uk-padding uk-padding-remove-bottom uk-padding-remove-top" uk-height-viewport="expand: true">
+        {if $user->language->name == 'spanish'}
+            <h3>Ediciónes</h3>
+        {else}
+            <h3>Bulletins</h3>
+        {/if}
+        <ul>
+            {var $newsletterIssues = $pages->get('name=newsletter')->children()->sort('-modified')}
+            {var $totalIssues = count($newsletterIssues)}
+            {foreach $newsletterIssues as $issues}
+                <li class="uk-text-large"> 
+                    <a class="uk-text-secondary" href="{$issues->url}?type=html&preview=1" target="_blank"><strong>{$issues->title}</strong></a>
+                    <ul>
+                        <li class="uk-text-default">
+                            <span class="uk-text-secondary">Issue {$totalIssues - $iterator->counter + 1} · {$issues->modified|date('Y F d')}</span>
+                        </li>
+                    </ul>
+                </li>
+            {/foreach}
+        </ul>
+    </div>
 
 </section>

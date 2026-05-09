@@ -11,7 +11,11 @@
 
         <div style="uk-text-small">
             
-            Site made with 
+            {if $user->language->name == 'spanish'}
+                Página hecho con 
+            {else}
+                Site made with 
+            {/if}
             
             <span style="display: inline-block; width:15px;">
                 {$pages->get("name=processwire, template=image")->markup|noescape}
@@ -23,18 +27,37 @@
             {* Get the most recently modified page *}
             {var $latestPage = $pages->find("sort=-modified, limit=1")->first()}
             
-            Updated on {date('Y F j H:i:s', $latestPage->modified)}
+
+            {if $user->language->name == 'spanish'}
+                Actualizado el 
+            {else}
+                Updated on 
+            {/if}
+
+            {date('Y F j H:i:s', $latestPage->modified)}
 
             <br>
 
-            Set in <a class="noExternalSVG uk-text-secondary" href="https://www.tunera.xyz/fonts/nyght-serif/" target="_blank">
-                Nyght Serif </a> by Maksym Kobuzan
+            {if $user->language->name == 'spanish'}
+                Typografía en 
+            {else}
+                Set in 
+            {/if}
+            
+            <a class="noExternalSVG uk-text-secondary" href="https://www.tunera.xyz/fonts/nyght-serif/" target="_blank">
+            
+            Nyght Serif </a> by Maksym Kobuzan
             
             
 
             <br>
 
-            Julia set graphic by 
+            {if $user->language->name == 'spanish'}
+                Gráfico de Julia set por 
+            {else}
+                Julia set graphic by 
+            {/if}
+            
             <a class="noExternalSVG uk-text-secondary" href="https://www.benjaminolsen.xyz/" alt="" target="_blank">
                 Ben Olsen
             </a>
