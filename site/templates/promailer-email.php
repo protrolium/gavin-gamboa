@@ -73,7 +73,7 @@ if($input->get('type') === 'html') { ?>
 	<html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>{subject}</title>
+		<title><?=$page->title?></title>
 		<style type='text/css'>
 			body {
 				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -147,10 +147,11 @@ if($input->get('type') === 'html') { ?>
 			$browserViewUrl .= (strpos($browserViewUrl, '?') === false ? '?' : '&') . 'type=html&preview=1';
 		?>
 		<!-- display links to browser view and RSS feed -->
-		<p style="font-size: 12px;">view this message in the 
+		<p style="font-size: 12px;">view in the 
 			<a style="color: #e83561;" href="<?=$sanitizer->entities($browserViewUrl)?>" target="_blank">browser</a>
-			· or subscribe via 
-			<a style="color: #e83561;" href="https://gavingamboa.net/rss/" target="_blank">RSS</a></p>
+			· subscribe via 
+			<a style="color: #e83561;" href="https://gavingamboa.net/newsletter/" target="_blank">email</a> or
+			<a style="color: #e83561;" href="https://gavingamboa.net/rss-newsletter/" target="_blank">rss</a></p>
 		
 		<!-- <?=$page->get('body')?> original body code -->
 		<?= promailerEmailInlineBodyHtml($page->get('body')) ?>

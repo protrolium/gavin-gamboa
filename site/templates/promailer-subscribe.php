@@ -72,6 +72,7 @@ if(!defined("PROCESSWIRE")) die();
 /** @var Sanitizer $sanitizer */
 /** @var Modules $modules */
 /** @var Page $page */
+/** @var User $user */
 
 /******************************************************************************************************
  * COMMON MARKUP
@@ -150,6 +151,8 @@ $emailBodyHTML = <<< _OUT
 	</body></html>
 _OUT;
 
+$langName = ($user && $user->language) ? $user->language->name : '';
+
 /**
  * Options and labels for the subscription form
  * 
@@ -176,7 +179,7 @@ $subscribeOptions = array(
 	'emailFromName' => 'Gavin Gamboa', // optional email name from, i.e. "ProcessWire"
 	
 	// field labels
-	'emailFieldLabel' => __('Newsletter'),
+	'emailFieldLabel' => ($langName === 'spanish' || $langName === 'es') ? 'Boletín' : __('Newsletter'),
 	'emailFieldPlaceholder' => __('email@domain.com'),
 	'submitFieldLabel' => __('➩'),
 
@@ -245,10 +248,17 @@ $unsubscribeOptions = array(
  * 
  */
 
-$replacements = [
-	'EMAIL-SENT' => '<p>Thank you! A confirmation email has been sent to your inbox.</p>',
-    'SUBSCRIPTION-CONFIRMED' => '<h1>Your subscription has been confirmed.</h1> <h2>My newsletter is low-frequency and it is self-hosted, which means that your inbox will not be cluttered, and your email addresses will not be sent via—nor sold to—a third party, ever.</h2> <h3>Thank you for your support.</h3>'
-];
+if($langName === 'spanish' || $langName === 'es') {
+	$replacements = [
+		'EMAIL-SENT' => '<p>¡Gracias! Te hemos enviado un correo de confirmación a tu bandeja de entrada.</p>',
+		'SUBSCRIPTION-CONFIRMED' => '<h1>Tu suscripción está confirmada.</h1> <h2>Este boletín es de baja frecuencia y está alojado en mi propio sitio: no inundaré tu correo ni compartiré ni venderé tu dirección a terceros, nunca.</h2> <h3>Gracias por tu apoyo.</h3>',
+	];
+} else {
+	$replacements = [
+		'EMAIL-SENT' => '<p>Thank you! A confirmation email has been sent to your inbox.</p>',
+		'SUBSCRIPTION-CONFIRMED' => '<h1>Your subscription has been confirmed.</h1> <h2>My newsletter is low-frequency and it is self-hosted, which means that your inbox will not be cluttered, and your email addresses will not be sent via—nor sold to—a third party, ever.</h2> <h3>Thank you for your support.</h3>',
+	];
+}
 
 /*************************************************************************************************************
  * EXECUTE 
@@ -272,7 +282,13 @@ if($input->get('webhook') && !$isInclude) {
 	$out = $promailer->forms->unsubscribe($unsubscribeOptions); 
 	
 } else {
-	// subscribe 
+	// subscribe and prevent double submission on /newsletter page
+	if($isInclude && $input->requestMethod('POST')) {
+		static $promailerSubscribePostPass = 0;
+		if($promailerSubscribePostPass++) {
+			return;
+		}
+	}
 	$out = $promailer->forms->subscribe($subscribeOptions);
 }
 
