@@ -45,8 +45,9 @@ $home = $pages->get('/'); // homepage directory
 				background-color: #fafafa; /* fallback for --bg-color */
 			}
 			
+			/* fix for nav header accented characters not displaying correctly */
 			.uk-navbar-nav>li>a, .uk-navbar-item, .uk-navbar-toggle, .uk-navbar-container {
-				font-family: 'DTNightingale', sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+				font-family: 'DTNightingale', 'NavLatinExt', 'NyghtSerif', sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 				font-size: 1.1rem;
 				font-weight: 800;
 			}
@@ -85,11 +86,10 @@ $home = $pages->get('/'); // homepage directory
 		<?php $metadata = $modules->get('MarkupMetadata');?>
 		<?php echo $metadata->render();?>
 
-		<!-- rss -->
-		<link rel="alternate" type="application/rss+xml" title="Gavin Gamboa · Newsletter RSS Feed" href="<?= $pages->get('/rss/')->url ?>" />
-
-		<!-- mastodon verification -->
-		<link rel="me" href="https://sonomu.club/@gavcloud" />
+		<!-- rss: only on /newsletter (page name matches rest of site) -->
+		<?php if ($page->name === 'newsletter'): ?>
+			<link rel="alternate" type="application/rss+xml" title="Gavin Gamboa · Newsletter RSS Feed" href="<?= $pages->get('/rss-newsletter/')->url ?>" />
+		<?php endif; ?>
 
 	</head>
 	<body id="html-body">
@@ -116,6 +116,6 @@ $home = $pages->get('/'); // homepage directory
 		<!-- scripts for once DOM is loaded -->
 		<script type="text/javascript" src="<?php echo $config->urls->templates?>scripts/onload.js" defer></script>
 		<!-- mastodon verification -->
-		<!-- <a class="noExternalSVG" rel="me" href="" style="display:hidden;" aria-label="Mastodon Verification"></a> -->
+		<a class="noExternalSVG" rel="me" href="https://sonomu.club/@gavcloud" style="display:hidden;" aria-label="Mastodon Verification"></a>
 	</body>
 </html>
