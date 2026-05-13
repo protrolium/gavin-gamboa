@@ -10,13 +10,14 @@
             <div class="uk-navbar-left uk-margin-small-left">
                 <div>
                     <a class="uk-icon noHover" href="{$pages->get('/')->url}" aria-label="Navigate to Home">
-                        <span class="uk-text-default uk-text-uppercase">{$modules->MarkupMetadata->site_name}</span>
+                        <span class="uk-text-default uk-text-uppercase" style="display: block; margin-top: 5px;">
+                            {$modules->MarkupMetadata->site_name}
+                        </span>
                     </a>
                 </div>
             </div>
 
-            <div class="uk-navbar-right uk-padding-small">
-
+            <div class="uk-navbar-right" style="padding: 5px;">
                 <div>
                     <button id="dark-mode-btn" class="theme-toggle uk-text-large" style="margin-top: -0.12rem;" onclick="toggleTheme()" aria-label="Toggle Dark/Light Mode">
                         <span>{$pages->get('name=theme-switcher-svg, template=image')->markup|noescape}</span>
@@ -27,9 +28,13 @@
                 <div style="margin-top: 0.3rem;" class="uk-margin-remove-left">
                     {foreach $languages as $language}
                         {if $user->language->id == $language->id}
-                            <span style="padding-left: 0.5rem;" class="active uk-text-secondary">{$language->title}</span>
+                            <span style="padding-left: 0.5rem; font-weight: 200;" class="active uk-text-secondary">{$language->title}</span>
                         {else}
-                            <a href="{$page->localUrl($language)}"><span style="padding-left: 0.5rem;" class="uk-text-secondary">{$language->title}</span></a>
+                            <a href="{$page->localUrl($language)}">
+                                <span style="padding-left: 0.5rem; font-weight: 200;" class="uk-text-secondary">
+                                    {$language->title}
+                                </span>
+                            </a>
                         {/if}
                     {/foreach}
                 </div>
@@ -71,9 +76,17 @@
                     {foreach $navItems as $item}
                         <li n:class="$rockfrontend->isActive($item) ? uk-active">
                             {if $item == $pages->get('name=wiki')}
-                                <a class="noExternalSVG" href="https://gavart.ist/" target="_blank">Wiki</a>
+                                {if $user->language->name == 'chinese'}
+                                    <a style="font-weight: 200;" class="noExternalSVG" href="https://gavart.ist/" target="_blank">维基</a>
+                                {else}
+                                    <a class="noExternalSVG" href="https://gavart.ist/" target="_blank">Wiki</a>
+                                {/if}
                             {else}
-                                <a href="{$item->url}">{$item->title}</a>
+                                {if $user->language->name == 'chinese'}
+                                    <a style="font-weight: 200;" href="{$item->url}">{$item->title}</a>
+                                {else}
+                                    <a href="{$item->url}">{$item->title}</a>
+                                {/if}
                             {/if}
                         </li>
                     {/foreach}
@@ -90,9 +103,9 @@
                 <div class="uk-margin-remove-left">
                     {foreach $languages as $language}
                         {if $user->language->id == $language->id}
-                            <span style="padding-left: 0.5rem;" class="active uk-text-secondary">{$language->title}</span>
+                            <span style="padding-left: 0.5rem; font-weight: 200;" class="active uk-text-secondary">{$language->title}</span>
                         {else}
-                            <a href="{$page->localUrl($language)}"><span style="padding-left: 0.5rem;" class="uk-text-secondary">{$language->title}</span></a>
+                            <a href="{$page->localUrl($language)}"><span style="padding-left: 0.5rem; font-weight: 200;" class="uk-text-secondary">{$language->title}</span></a>
                         {/if}
                     {/foreach}
                 </div>
@@ -114,7 +127,11 @@
                     <li n:class="$rockfrontend->isActive($item) ? uk-active, uk-text-large, offcanvas-mobile"
                         style="list-style:none;">
                         {if $item == $pages->get('name=wiki')}
-                            <a class="noExternalSVG uk-text-secondary" href="https://gavart.ist/" target="_blank">Wiki</a>
+                            {if $user->language->name == 'chinese'}
+                                <a class="noExternalSVG uk-text-secondary" href="https://gavart.ist/" target="_blank">维基</a>
+                            {else}  
+                                <a class="noExternalSVG uk-text-secondary" href="https://gavart.ist/" target="_blank">Wiki</a>
+                            {/if}
                         {else}
                             <a class="uk-text-secondary" href="{$item->url}">{$item->title}</a>
                         {/if}
