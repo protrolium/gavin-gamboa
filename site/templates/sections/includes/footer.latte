@@ -2,7 +2,7 @@
 
     {* mobile / desktop social row *}
     <div class="uk-width-1-1 uk-grid-collapse" uk-grid>
-        <div class="uk-width-2-5@m uk-padding uk-padding-remove-bottom">
+        <div class="uk-width-2-5@m uk-margin-small-top uk-padding uk-padding-remove-bottom">
             <div class="social-icons-grid">
                 {foreach $pages->get('name=social-networks')->footer as $social}
                     <div style="width: 30px;">
@@ -14,29 +14,48 @@
             </div>
         </div>
 
-        <div class="uk-width-2-5@m uk-padding uk-padding-remove-bottom uk-padding-remove-right uk-flex uk-flex-wrap uk-flex-baseline uk-flex-center">
+        <div class="uk-width-expand@m uk-padding uk-padding-remove-right uk-padding-remove-bottom uk-flex uk-flex-wrap uk-flex-baseline uk-flex-left">
             
-            <div class="uk-width-1-3@m">
+            <div class="uk-width-1-4@m uk-padding-remove-left uk-margin-bottom">
+                <p class="uk-margin-remove-bottom uk-text-large">{$pages->get('name=directory')->title|capitalize}</p>
+                <div style="margin-top: 5px;">
+                    {foreach $pages->get('name=directory')->children() as $child}
+                        <p class="uk-margin-remove-bottom uk-margin-remove-top">
+                            <a class="uk-text-secondary" href="{$child->url}">{$child->title}</a>
+                        </p>
+                    {/foreach}
+                </div>
+            </div>
+
+            <div class="uk-width-1-4@m">
                 <p class="uk-margin-remove-bottom uk-text-large">{$pages->get('name=contact')->title|capitalize}</p>
                 <div style="margin-top: 5px;" class="uk-flex uk-flex-middle uk-margin-bottom">
                     {if $user->language->name == 'spanish'}
                         <a class="uk-text-secondary" href="{$pages->get('contact')->url}" title="Envíame un mensaje">Envíame un mensaje</a>
+                    {elseif $user->language->name == 'chinese'}
+                        <a class="uk-text-secondary" href="{$pages->get('contact')->url}" title="给我发消息">给我发消息</a>
                     {else}
                         <a class="uk-text-secondary" href="{$pages->get('contact')->url}" title="Send me a message">Send me a message</a>
                     {/if}
                 </div> 
             </div>
 
-            <div class="uk-width-2-3@m uk-flex uk-flex-column">
-                {if $page->name != 'newsletter'}
+
+            <div class="uk-width-expand@m uk-flex uk-flex-column">
+                {if $page->name != 'newsletter' && $page->name != 'subscribe'}
+                    <p class="uk-margin-remove-bottom uk-text-large">
+                        {$pages->get('name=newsletter')->title|capitalize}
+                    </p>
+
                     {$rockfrontend->render("promailer-subscribe.php")}
+
                 {/if}
             </div>
 
         </div>
 
         {* desktop logo *}
-        <div class="uk-width-1-5@m uk-padding uk-padding-remove-top uk-padding-remove-bottom uk-flex uk-flex-center">
+        <div class="uk-width-small@m uk-flex uk-flex-left uk-margin-right">
             <div class="uk-visible@m">
                 {* <a class="uk-icon noHover" href="{$pages->get('/')->url}" aria-label="Navigate to Home"> *}
                     <img class="uk-width-small" src="{$pages->get('name=julia-set-001, template=image')->featured_image->first->url}" alt="" uk-img>
