@@ -1,0 +1,44 @@
+<section 
+    uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 750; repeat: false;" 
+    uk-height-viewport="expand: true;">
+
+    <div class="uk-width-1-1">
+        <div class="uk-width-4-5@m" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
+            <div class="uk-width-1-1 uk-padding uk-padding-remove-bottom">
+                
+                {* title *}
+                <h1 style="line-height:1em;">{$page->title|noescape}</h1>
+                
+                <div class="uk-width-1-1 uk-width-2-3@m uk-padding">
+
+                    {var $directory = $pages->get('name=directory')}
+                    {var $sitemapPages = $pages->get('/')->children("id!=$directory->id")}
+                    {var $directoryPages = $directory->children()}
+
+                    {foreach $sitemapPages as $sitemapPage}
+                        <p class="uk-margin-remove-bottom uk-margin-remove-top uk-text-large">
+                            /<a class="uk-text-secondary" href="{$sitemapPage->url}">{$sitemapPage->title|lower}</a>
+                        </p>
+                    {/foreach}
+
+                    {if $directory->id}
+                        <p class="uk-margin-remove-bottom uk-margin-remove-top uk-text-large">
+                            /<span class="uk-text-secondary">{$directory->title|lower}</span>
+                        </p>
+                        <ul class="uk-margin-remove-top">
+                            {foreach $directoryPages as $directoryPage}
+                                <li style="list-style: none;">
+                                    /<a class="uk-text-secondary uk-text-large" href="{$directoryPage->url}">{$directoryPage->title|lower}</a>
+                                </li>
+                            {/foreach}
+                            <li style="list-style: none;">
+                                /<a class="uk-text-secondary uk-text-large noExternalSVG" href="https://gavart.ist/" target="_blank">{$pages->get('name=wiki')->title|lower}</a>
+                            </li>
+                        </ul>
+                    {/if}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
