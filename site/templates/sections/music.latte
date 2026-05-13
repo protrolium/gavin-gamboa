@@ -29,6 +29,8 @@
                     
                     {if $user->language->name == 'spanish'}
                         <h2 class="uk-text-muted">Lanzamientos</h2>
+                    {elseif $user->language->name == 'chinese'}
+                        <h2 class="uk-text-muted">发行</h2>
                     {else}
                         <h2 class="uk-text-muted">Releases</h2>
                     {/if}
@@ -75,6 +77,8 @@
 
                     {if $user->language->name == 'spanish'}
                         <h2 class="uk-text-muted">Discografía</h2>
+                    {elseif $user->language->name == 'chinese'}
+                        <h2 class="uk-text-muted">发行</h2>
                     {else}
                         <h2 class="uk-text-muted">Discography</h2>
                     {/if}
@@ -90,6 +94,8 @@
                     
                     {if $user->language->name == 'spanish'}
                         <h2 class="uk-text-muted">Video</h2>
+                    {elseif $user->language->name == 'chinese'}
+                        <h2 class="uk-text-muted">视频</h2>
                     {else}
                         <h2 class="uk-text-muted">Video</h2>
                     {/if}
@@ -110,6 +116,8 @@
 
                     {if $user->language->name == 'spanish'}
                         <h2 class="uk-text-muted">Cooperativas</h2>
+                    {elseif $user->language->name == 'chinese'}
+                        <h2 class="uk-text-muted">合作社</h2>
                     {else}
                         <h2 class="uk-text-muted">Cooperatives</h2>
                     {/if}

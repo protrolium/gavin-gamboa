@@ -13,6 +13,8 @@
             
             {if $user->language->name == 'spanish'}
                 Página hecho con 
+            {elseif $user->language->name == 'chinese'}
+                网站用途
             {else}
                 Site made with 
             {/if}
@@ -30,6 +32,8 @@
 
             {if $user->language->name == 'spanish'}
                 Actualizado el 
+            {elseif $user->language->name == 'chinese'}
+                更新于
             {else}
                 Updated on 
             {/if}
@@ -40,6 +44,8 @@
 
             {if $user->language->name == 'spanish'}
                 Typografía en 
+            {elseif $user->language->name == 'chinese'}
+                字体设置于
             {else}
                 Set in 
             {/if}
@@ -54,6 +60,8 @@
 
             {if $user->language->name == 'spanish'}
                 Gráfico de Julia set por 
+            {elseif $user->language->name == 'chinese'}
+                朱莉娅集合图形由
             {else}
                 Julia set graphic by 
             {/if}
