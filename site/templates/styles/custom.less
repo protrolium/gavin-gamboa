@@ -127,7 +127,15 @@
     --index-item-border-top: 1px solid black;
     --footer-gradient: linear-gradient(179deg, #ffffff, #e0e4ff, #deffe7, #f8e4ff);
     --footer-border-top: 1px solid black;
-}:root[data-theme="theme-dark"] {
+    /* RSS badge: derived from layout tokens (html[data-theme]) */
+    --rss-badge-track-bg: color-mix(in srgb, var(--text-color) 10%, var(--bg-color));
+    --rss-badge-track-fg: var(--text-color);
+    --rss-badge-accent-bg: var(--primary-color);
+    --rss-badge-accent-fg: #ffffff;
+    --rss-badge-icon-fill: color-mix(in srgb, var(--primary-color) 72%, #1a1a1a);
+}
+
+:root[data-theme="theme-dark"] {
     --primary-color: #49afd9;
     --text-color: #e3f5fc;
     --bg-color: #090d0f;
@@ -139,6 +147,11 @@
     --index-item-border-top: 1px solid rgb(100, 100, 100);
     --footer-gradient: linear-gradient(0deg, #090d0f, #1c1d28, #121531, #24092f);
     --footer-border-top: 1px solid rgb(100, 100, 100);
+    --rss-badge-track-bg: color-mix(in srgb, var(--component-bg-color) 65%, #000000);
+    --rss-badge-track-fg: var(--text-color);
+    --rss-badge-accent-bg: var(--primary-color);
+    --rss-badge-accent-fg: #061018;
+    --rss-badge-icon-fill: color-mix(in srgb, var(--primary-color) 82%, #ffffff);
 }
 
 html {
@@ -294,6 +307,31 @@ a.noHover:hover {
 // remove subscription form radius
  :focus-visible {
     border-radius: 0rem;
+}
+
+// Newsletter RSS badge (inline SVG in promailer-subscribe.latte)
+.rss-badge-link svg {
+    display: block;
+}
+
+.rss-badge-link .rss-badge__track {
+    fill: var(--rss-badge-track-bg);
+}
+
+.rss-badge-link .rss-badge__tab {
+    fill: var(--rss-badge-accent-bg);
+}
+
+.rss-badge-link .rss-badge__text-main {
+    fill: var(--rss-badge-track-fg);
+}
+
+.rss-badge-link .rss-badge__text-tab {
+    fill: var(--rss-badge-accent-fg);
+}
+
+.rss-badge-link .rss-badge__icon {
+    fill: var(--rss-badge-icon-fill);
 }
 
 // footer newsletter subscribe form (ProMailer)
