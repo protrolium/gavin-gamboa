@@ -124,9 +124,8 @@ $wrapMarkup = "<div id='promailer'>{out}</div>";
  */
 $subscribeForm = <<< _OUT
 	<form id='promailer-form' action='{url}#promailer-form' method='post'>
-		<label style="font-family: 'NyghtSerif'; font-size: 24px;" for='{email_name}'>{email_label}</label>
-		<br>
-		<input style="font-family: 'NyghtSerif'; font-size: 16px; margin-top: 5px;" type='email' id='{email_name}' name='{email_name}' placeholder='{email_placeholder}' value='{email_value}' required>
+		<!-- <label style="font-family: 'NyghtSerif'; font-size: 24px;" for='{email_name}'>{email_label}</label> <br> -->
+		<input style="width: 210px; font-family: 'NyghtSerif'; font-size: 16px; margin-top: 5px;" type='email' id='{email_name}' name='{email_name}' placeholder='{email_placeholder}' value='{email_value}' required>
 		{honeypot}
 		<button style="font-size: 19px; margin-top: 5px;" type='submit' name='{submit_name}' value='1'>{submit_label}</button>
 		{extras}
@@ -179,7 +178,7 @@ $subscribeOptions = array(
 	'emailFromName' => 'Gavin Gamboa', // optional email name from, i.e. "ProcessWire"
 	
 	// field labels
-	'emailFieldLabel' => ($langName === 'spanish' || $langName === 'es') ? 'Boletín' : __('Newsletter'),
+	'emailFieldLabel' => ($langName === 'spanish' || $langName === 'es') ? 'Boletín' : (($langName === 'chinese' || $langName === 'zh') ? '通讯' : __('Newsletter')),
 	'emailFieldPlaceholder' => __('email@domain.com'),
 	'submitFieldLabel' => __('➩'),
 
@@ -253,6 +252,11 @@ if($langName === 'spanish' || $langName === 'es') {
 		'EMAIL-SENT' => '<p>¡Gracias! Te hemos enviado un correo de confirmación a tu bandeja de entrada.</p>',
 		'SUBSCRIPTION-CONFIRMED' => '<h1>Tu suscripción está confirmada.</h1> <h2>Este boletín es de baja frecuencia y está alojado en mi propio sitio: no inundaré tu correo ni compartiré ni venderé tu dirección a terceros, nunca.</h2> <h3>Gracias por tu apoyo.</h3>',
 	];
+} elseif($langName === 'chinese' || $langName === 'zh') {
+	$replacements = [
+		'EMAIL-SENT' => '<p>谢谢！确认邮件已发送至您的收件箱。</p>',
+		'SUBSCRIPTION-CONFIRMED' => '<h1>您的订阅已确认。</h1> <h2>我的通讯推送频率很低，并由本站自行托管：您的收件箱不会被无关来信塞满，邮箱地址也绝不会经第三方传送或出售。</h2> <h3>感谢您的支持。</h3>',
+	];
 } else {
 	$replacements = [
 		'EMAIL-SENT' => '<p>Thank you! A confirmation email has been sent to your inbox.</p>',
@@ -282,13 +286,7 @@ if($input->get('webhook') && !$isInclude) {
 	$out = $promailer->forms->unsubscribe($unsubscribeOptions); 
 	
 } else {
-	// subscribe and prevent double submission on /newsletter page
-	if($isInclude && $input->requestMethod('POST')) {
-		static $promailerSubscribePostPass = 0;
-		if($promailerSubscribePostPass++) {
-			return;
-		}
-	}
+	// subscribe 
 	$out = $promailer->forms->subscribe($subscribeOptions);
 }
 
