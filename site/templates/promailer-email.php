@@ -119,6 +119,31 @@ if($input->get('type') === 'html') { ?>
 				line-height: 0;
 			}
 		</style>
+
+		<!-- metatags -->
+		<?php $metadata = $modules->get('MarkupMetadata'); ?>
+		<?php
+		$metadata->render_og = false;
+		$ogDescription = promailerEmailFirstParagraphPlain($page->get('body'));
+		$metadata->setMeta('meta', [
+			'property' => 'og:title',
+			'content' => $page->title,
+		]);
+		if($ogDescription) {
+			$metadata->setMeta('meta', [
+				'property' => 'og:description',
+				'content' => $ogDescription,
+			]);
+		}
+		if($page->hasField('featured_image') && $page->featured_image->first) {
+			$metadata->setMeta('meta', [
+				'property' => 'og:image',
+				'content' => $page->featured_image->first->httpUrl,
+			]);
+		}
+		?>
+		<?php echo $metadata->render(); ?>
+
 	</head>
 	<body style="width: 100%; max-width: 600px; margin: 0 auto; padding: 0 16px; box-sizing: border-box;">
 		<h1 style="background-color: #000; padding: 20px 15px; color: #fff; margin: 0; font-size: 28px; font-weight: 200;">
@@ -212,6 +237,3 @@ if($input->get('type') === 'html') { ?>
 
 	<?php
 } // finished
-
-
-
