@@ -120,6 +120,14 @@ if($input->get('type') === 'html') { ?>
 			}
 		</style>
 
+		<!-- favicons -->
+		<link rel="apple-touch-icon" sizes="180x180" href="<?php echo $config->urls->assets?>favicon/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="<?php echo $config->urls->assets?>favicon/favicon-96x96.png">
+		<link rel="manifest" href="<?php echo $config->urls->assets?>favicon/site.webmanifest">
+		<link rel="mask-icon" href="<?php echo $config->urls->assets?>favicon/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="theme-color" content="#ffffff">
+
 		<!-- metatags -->
 		<?php $metadata = $modules->get('MarkupMetadata'); ?>
 		<?php
