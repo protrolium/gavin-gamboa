@@ -11,6 +11,37 @@
  */
 
 /**
+ * First non-empty paragraph from newsletter body HTML (for meta descriptions).
+ *
+ * @param string|null $html Raw body field HTML
+ * @return string Plain text, truncated to ~300 chars when longer
+ */
+function promailerEmailFirstParagraphPlain($html): string {
+	if ($html === null || $html === '') {
+		return '';
+	}
+	$html = trim((string) $html);
+	if ($html === '' || !preg_match_all('#<p[^>]*>(.*?)</p>#is', $html, $matches)) {
+		return '';
+	}
+	foreach ($matches[1] as $inner) {
+		$plain = strip_tags($inner);
+		$plain = html_entity_decode($plain, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		$plain = preg_replace('/\s+/u', ' ', $plain);
+		$plain = trim((string) $plain);
+		if ($plain === '') {
+			continue;
+		}
+		if (strlen($plain) > 300) {
+			$plain = substr($plain, 0, 297) . '…';
+		}
+		return $plain;
+	}
+
+	return '';
+}
+
+/**
  * Plain-text excerpt of newsletter body for RSS (MarkupRSS / validators).
  *
  * @param string|null $html Raw body field HTML
