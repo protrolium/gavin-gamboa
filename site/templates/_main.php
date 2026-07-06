@@ -86,9 +86,12 @@ $home = $pages->get('/'); // homepage directory
 		<?php $metadata = $modules->get('MarkupMetadata');?>
 		<?php echo $metadata->render();?>
 
-		<!-- rss: only on /newsletter (page name matches rest of site) -->
+		<!-- rss + Standard.site discovery hint: only on /newsletter -->
 		<?php if ($page->name === 'newsletter'): ?>
 			<link rel="alternate" type="application/rss+xml" title="Gavin Gamboa · Newsletter RSS Feed" href="<?= $pages->get('/rss-newsletter/')->url ?>" />
+			<?php if (!empty($config->standardSitePublicationUri)): ?>
+				<link rel="site.standard.publication" href="<?= $sanitizer->entities($config->standardSitePublicationUri) ?>" />
+			<?php endif; ?>
 		<?php endif; ?>
 
 	</head>

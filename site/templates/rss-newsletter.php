@@ -11,35 +11,6 @@ function rss_xml_escape_url(string $url): string {
 	return htmlspecialchars($url, ENT_XML1 | ENT_QUOTES, 'UTF-8');
 }
 
-/**
- * MarkupRSS hardcodes item <link> and <guid> to $page->httpUrl with no query. Append the
- * promailer-email HTML preview query only inside <item>…</item> (channel / atom:self stay unchanged).
- */
-function rss_append_preview_query_to_item_urls(string $xml, string $query): string {
-	$out = preg_replace_callback(
-		'#<item>(.*?)</item>#s',
-		static function (array $m) use ($query): string {
-			return (string) preg_replace_callback(
-				'#<(link|guid)>([^<]+)</\1>#',
-				static function (array $im) use ($query): string {
-					$url = html_entity_decode($im[2], ENT_XML1 | ENT_QUOTES, 'UTF-8');
-					if (strpos($url, 'type=html') !== false && strpos($url, 'preview=1') !== false) {
-						return '<' . $im[1] . '>' . rss_xml_escape_url($url) . '</' . $im[1] . '>';
-					}
-					$sep = strpos($url, '?') === false ? '?' : '&';
-					$full = $url . $sep . $query;
-
-					return '<' . $im[1] . '>' . rss_xml_escape_url($full) . '</' . $im[1] . '>';
-				},
-				$m[0]
-			);
-		},
-		$xml
-	);
-
-	return $out !== null ? $out : $xml;
-}
-
 require_once __DIR__ . '/scripts/email-body-inline-styles.php';
 
 $rss = $modules->get('MarkupRSS');
@@ -54,9 +25,6 @@ $rss->itemTitleField = 'title';
 $rss->itemDescriptionField = 'body_rss_html';
 $rss->itemDescriptionLength = 0;
 $rss->itemContentField = '';
-
-// Appended to each item <link> and <guid> (matches promailer-email.php ?type=html&preview=1)
-$mailPreviewQuery = 'type=html&preview=1';
 
 $items = $pages->find('parent=newsletter, template=promailer-email, sort=-published');
 
@@ -87,7 +55,6 @@ $hookId = $wire->addHookAfter('Page::getUnknown', function (HookEvent $e) {
 
 try {
 	$xml = $rss->renderFeed($items);
-	$xml = rss_append_preview_query_to_item_urls($xml, $mailPreviewQuery);
 	header((string) $rss->header);
 	echo $xml;
 } finally {

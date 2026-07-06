@@ -15,6 +15,18 @@ if(!defined("PROCESSWIRE")) die();
  *
  */
 
+// Standard.site publication verification (/.well-known/site.standard.publication/newsletter)
+$standardSitePath = wire('input')->url();
+if (preg_match('#\.well-known/site\.standard\.publication/newsletter/?$#', $standardSitePath)) {
+	$uri = (string) wire('config')->standardSitePublicationUri;
+	if ($uri !== '') {
+		header('Content-Type: text/plain; charset=utf-8');
+		echo $uri;
+		exit;
+	}
+	throw new Wire404Exception();
+}
+
 // RSS template: raw XML only (no _init / _main). Page must use template name "rss".
 $p = wire('page');
 if ($p && $p->id && $p->template->name === 'rss') {
@@ -182,6 +194,65 @@ function nli_adminTabHtml(int $pageId): string {
 </script>
 HTML;
 }
+
+// ─── STANDARD.SITE AUTO-SYNC ─────────────────────────────────────────────────
+//
+// When a promailer-email page is published and has no at_uri yet, create a
+// site.standard.document record on the AT Protocol PDS and store the URI.
+// Requires $config->bskyAppPassword and $config->standardSitePublicationUri
+// to be set (in config-local.php locally, or config.php on production).
+// Silently skips if either is absent.
+
+$wire->addHookAfter('Pages::saved', function(HookEvent $e) {
+	/** @var Page $page */
+	$page = $e->arguments(0);
+
+	if (!$page || $page->template->name !== 'promailer-email') return;
+	if ($page->isUnpublished()) return;
+	if (!$page->hasField('at_uri') || $page->at_uri) return;
+
+	$config   = wire('config');
+	$password = (string) ($config->bskyAppPassword ?? '');
+	$pubUri   = (string) ($config->standardSitePublicationUri ?? '');
+	if ($password === '' || $pubUri === '') return;
+
+	$pds    = 'https://inkcap.us-east.host.bsky.network';
+	$handle = 'gav.cloud';
+
+	try {
+		require_once wire('config')->paths->templates . 'scripts/standard-site-xrpc.php';
+		require_once wire('config')->paths->templates . 'scripts/email-body-inline-styles.php';
+
+		$session = standardSiteCreateSession($pds, $handle, $password);
+
+		$body        = $page->getUnformatted('body');
+		$publishedTs = $page->published ?: $page->created;
+
+		$record = [
+			'$type'       => 'site.standard.document',
+			'site'        => $pubUri,
+			'title'       => trim(strip_tags((string) $page->title)),
+			'path'        => '/' . $page->name . '/',
+			'description' => promailerEmailFirstParagraphPlain($body),
+			'publishedAt' => gmdate('Y-m-d\TH:i:s\Z', $publishedTs),
+			'textContent' => promailerEmailBodyPlainForRss($body),
+			'tags'        => ['newsletter'],
+			'createdAt'   => gmdate('Y-m-d\TH:i:s\Z'),
+		];
+
+		$uri = standardSiteCreateDocument($pds, $session['did'], $session['token'], $record);
+
+		$page->of(false);
+		$page->at_uri = $uri;
+		$page->save('at_uri');
+		$page->of(true);
+
+		wire('log')->save('standard-site', "Created document record for '{$page->name}': {$uri}");
+
+	} catch (Throwable $ex) {
+		wire('log')->save('standard-site', "Failed for '{$page->name}': " . $ex->getMessage());
+	}
+});
 
 // ─── WEBP IMAGE SUPPORT ──────────────────────────────────────────────────────
 

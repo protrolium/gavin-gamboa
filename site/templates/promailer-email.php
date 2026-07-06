@@ -66,8 +66,11 @@ if(!defined("PROCESSWIRE")) die();
 
 require_once __DIR__ . '/scripts/email-body-inline-styles.php';
 
-// HTML email output
-if($input->get('type') === 'html') { ?>
+// Bare URL (no ?type=) serves the HTML document — canonical for Standard.site path verification.
+// ProMailer still requests ?type=html or ?type=text explicitly. Preview links: ?preview=links
+$isHtml = ($input->get('type') === 'html' || !$input->get('type'));
+
+if($isHtml) { ?>
 
 	<!DOCTYPE html>
 	<html>
@@ -152,6 +155,10 @@ if($input->get('type') === 'html') { ?>
 		?>
 		<?php echo $metadata->render(); ?>
 
+		<?php if ($page->hasField('at_uri') && $page->at_uri): ?>
+			<link rel="site.standard.document" href="<?= $sanitizer->entities($page->at_uri) ?>" />
+		<?php endif; ?>
+
 	</head>
 	<body style="width: 100%; max-width: 600px; margin: 0 auto; padding: 0 16px; box-sizing: border-box;">
 		<h1 style="background-color: #000; padding: 20px 15px; color: #fff; margin: 0; font-size: 28px; font-weight: 200;">
@@ -174,11 +181,8 @@ if($input->get('type') === 'html') { ?>
 			</p>
 		<?php endif; ?>
 		
-		<!-- force the browser view url to be HTML markup version of the page -->
-		<?php
-			$browserViewUrl = $page->httpUrl;
-			$browserViewUrl .= (strpos($browserViewUrl, '?') === false ? '?' : '&') . 'type=html&preview=1';
-		?>
+		<!-- browser view uses the canonical page URL (no query string) -->
+		<?php $browserViewUrl = $page->httpUrl; ?>
 		<!-- display links to browser view and RSS feed -->
 		<p style="font-size: 12px;">view in the 
 			<a style="color: #e83561;" href="<?=$sanitizer->entities($browserViewUrl)?>" target="_blank">browser</a>
@@ -231,17 +235,21 @@ if($input->get('type') === 'html') { ?>
 	echo $sanitizer->getTextTools()->markupToText(strtoupper($page->title) . "\n\n" . $page->get('body'));
 	echo "\n\n---\n\nTo unsubscribe visit: {unsubscribe_url}";
 
-} else { // show preview links to our text and HTML emails ?>
+} else if($input->get('preview') === 'links') { // admin preview menu ?>
 
 	<html>
 	<body>
 		<ul>
-			<li><a href='./?type=html&preview=1'>Preview HTML email</a></li>	
-			<li><a href='./?type=text&preview=1'>Preview TEXT-only email</a></li>
+			<li><a href='./'>View HTML (canonical URL)</a></li>
+			<li><a href='./?type=html&amp;preview=1'>Preview HTML email</a></li>	
+			<li><a href='./?type=text&amp;preview=1'>Preview TEXT-only email</a></li>
 			<?php if($page->editable()) echo "<li><a href='$page->editUrl'>Edit this email</a></li>"; ?>
 		</ul>
 	</body>
 	</html>
 
 	<?php
+} else {
+	// Unknown ?type= value — send to canonical HTML URL
+	$session->redirect($page->url);
 } // finished
