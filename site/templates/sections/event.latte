@@ -1,0 +1,113 @@
+{var $events = $pages->get('name=events')->children('template=event, event_datetime>=' . time() . ', sort=event_datetime')}
+        
+        {if $events->count() === 0}
+            <p class="uk-text-muted">No upcoming events</p>
+        {else}
+            {* mobile view *}
+            <div class="uk-hidden@m">
+                <ul uk-accordion="multiple: false" uk-scrollspy="cls: uk-animation-fade; target: > li; delay: 500; repeat: false;">
+
+                    {foreach $events as $event}
+                        {var $ts = (int) $event->getUnformatted('event_datetime')}
+
+                        <li>
+                            <a class="uk-accordion-title" href>
+                                <div class="uk-grid uk-flex-middle uk-grid-collapse" uk-grid>
+                                    <div class="uk-width-auto uk-text-center uk-padding-small uk-padding-remove-left uk-padding-remove-top">
+                                        <div class="uk-text-large uk-text-bold">{wireDate('j', $ts)}</div>
+                                        <div class="uk-text-small uk-text-uppercase">{wireDate('M', $ts)}</div>
+                                    </div>
+
+                                    <div>
+                                        <div class="uk-width-expand">
+                                            <div>
+                                                {$event->title|noescape}
+                                            </div>
+                                            {if $event->location}
+                                                <div class="uk-text-muted">{$event->location|noescape}</div>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <div class="uk-accordion-content">
+                                {if $event->organization}
+                                    <p>
+                                        <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span> 
+                                        • 
+                                        <span class="uk-margin-small-left">{wireDate('g:i A', $ts)}</span>
+                                    </p>
+                                {/if}
+                                {if $event->program}
+                                    <div class="uk-margin-bottom">{$event->program|noescape}</div>
+                                {/if}
+                                {if $event->tickets_url}
+                                    <a href="{$event->tickets_url}" target="_blank" rel="noopener"
+                                    class="noExternalSVG uk-button uk-button-primary uk-button-small">
+                                        Tickets
+                                    </a>
+                                {/if}
+                            </div>
+                        </li>
+
+                    {/foreach}
+
+                </ul>
+            
+            </div>
+
+            {* desktop view *}
+            <div class="uk-visible@m">
+                <ul uk-accordion="multiple: false" uk-scrollspy="cls: uk-animation-fade; target: > li; delay: 500; repeat: false;">
+
+                    {foreach $events as $event}
+                        {var $ts = (int) $event->getUnformatted('event_datetime')}
+
+                        <li>
+                            <a class="uk-accordion-title" href>
+                                <div class="uk-grid uk-flex-middle" uk-grid>
+                                    <div class="uk-width-auto uk-text-center">
+                                        <div class="uk-text-large uk-text-bold">{wireDate('j', $ts)}</div>
+                                        <div class="uk-text-small uk-text-uppercase">{wireDate('M', $ts)}</div>
+                                    </div>
+
+                                    <div class="uk-transition-toggle">
+                                        <div class="uk-width-expand uk-transition-scale-up uk-transition-opaque">
+                                            <div>
+                                                {$event->title|noescape}
+                                            </div>
+                                            {if $event->location}
+                                                <div class="uk-text-muted">{$event->location|noescape}</div>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <div class="uk-accordion-content" style="margin-left: 103px;">
+                                {if $event->organization}
+                                    <p>
+                                        <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span> 
+                                        • 
+                                        <span class="uk-margin-small-left">{wireDate('g:i A', $ts)}</span>
+                                    </p>
+                                {/if}
+                                {if $event->program}
+                                    <div class="uk-margin-bottom">{$event->program|noescape}</div>
+                                {/if}
+                                {if $event->tickets_url}
+                                    <a href="{$event->tickets_url}" target="_blank" rel="noopener"
+                                    class="noExternalSVG uk-button uk-button-primary uk-button-small">
+                                        Tickets
+                                    </a>
+                                {/if}
+                            </div>
+                        </li>
+
+                    {/foreach}
+
+                </ul>
+            
+            </div>
+        {/if}

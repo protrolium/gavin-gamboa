@@ -1,0 +1,12 @@
+<section>
+    <div class="uk-width-4-5@m uk-padding" uk-height-viewport="expand: true" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 500; repeat: false;">
+
+        <div>
+            <h1 class="uk-margin-large-bottom" style="line-height:1em;">
+                {$pages->get('name=events')->title|noescape}
+            </h1>
+        </div>
+
+        {$rockfrontend->render("/sections/event.latte")}
+    </div>
+</section>
