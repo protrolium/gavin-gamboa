@@ -32,3 +32,19 @@
     </div>
 
 </section>
+
+{* Events *}
+<section>
+    {if $pages->get('name=events')->children('template=event, event_datetime>=' . time() . ', sort=event_datetime')->count() > 0}
+        <div class="uk-width-4-5@m uk-padding-large uk-padding-remove-bottom" uk-scrollspy="target: > h2; cls: uk-animation-fade; delay: 300; repeat: false;">
+            {if $user->language->name == 'spanish'}
+                <h2 class="uk-text-muted">Conciertos</h2>
+            {elseif $user->language->name == 'chinese'}
+                <h2 class="uk-text-muted">活动</h2>
+            {else}
+                <h2 class="uk-text-muted">Events</h2>
+            {/if}
+            {$rockfrontend->render("/sections/event.latte")}
+        </div>
+    {/if}
+</section>
