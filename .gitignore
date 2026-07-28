@@ -32,6 +32,8 @@ site/templates/image.php
 site/templates/social-networks.php
 site/templates/tag.php
 site/templates/tags.php
+site/templates/scripts/standard-site-create-publication.php
+site/templates/promailer-webhooks.inc
 
 # Ignore UIkit
 site/templates/uikit/
