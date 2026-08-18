@@ -171,7 +171,7 @@ if($isHtml) { ?>
 			<span style="color:thistle; font-weight: 700;"><strong><?=$page->title?></strong></span>
 			<span style="display: block; font-size: 12px; color: #fff; font-weight: 300; line-height: 0.75em;">
 				<br>
-				Bulletin • <strong><?=date('Y F j', $page->modified)?></strong> → Los Angeles • Issue 1
+				Bulletin • <strong><?=date('Y F j', strtotime($page->issue_date))?></strong> → Los Angeles • Issue 1
 			</span>
 		</h1>
 

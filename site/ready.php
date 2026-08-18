@@ -226,7 +226,7 @@ $wire->addHookAfter('Pages::saved', function(HookEvent $e) {
 		$session = standardSiteCreateSession($pds, $handle, $password);
 
 		$body        = $page->getUnformatted('body');
-		$publishedTs = $page->published ?: $page->created;
+		$publishedTs = $page->issue_date ?: $page->published;
 
 		$record = [
 			'$type'       => 'site.standard.document',

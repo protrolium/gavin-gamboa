@@ -25,8 +25,9 @@ $rss->itemTitleField = 'title';
 $rss->itemDescriptionField = 'body_rss_html';
 $rss->itemDescriptionLength = 0;
 $rss->itemContentField = '';
+$rss->itemDateField = 'issue_date';
 
-$items = $pages->find('parent=newsletter, template=promailer-email, sort=-published');
+$items = $pages->find('parent=newsletter, template=promailer-email, sort=-issue_date');
 
 // MarkupRSS calls strip_tags($page->get(itemTitleField)) before empty check — skip pages with no title.
 $withTitles = new PageArray();
