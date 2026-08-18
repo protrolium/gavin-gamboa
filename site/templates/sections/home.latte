@@ -44,7 +44,7 @@
             {else}
                 <h2 class="uk-text-muted">Events</h2>
             {/if}
-            {$rockfrontend->render("/sections/event.latte")}
+            {$rockfrontend->render("/sections/event.latte", ['upcomingOnly' => true])}
         </div>
     {/if}
 </section>
