@@ -257,10 +257,47 @@ $wire->addHookAfter('Pages::saved', function(HookEvent $e) {
 // ─── WEBP IMAGE SUPPORT ──────────────────────────────────────────────────────
 
 //  webp image support
+//
+// Only converts already-resized variations (cheap: small pixel dimensions).
+// Skips full-size originals — templates that link directly to $image->url
+// (lightbox hrefs, hero backgrounds) would otherwise force GD to decode the
+// full-resolution original into memory on every first view, which for a
+// large photo (~4000px) needs a raw buffer well over 100MB — enough to
+// exhaust a 128MB memory_limit on its own.
  if($page->template != 'admin') {
     $wire->addHookAfter('Pageimage::url', function($event) {
       static $n = 0;
-      if(++$n === 1) $event->return = $event->object->webp()->url();
+      if(++$n === 1 && $event->object->getOriginal() !== null) {
+        $event->return = $event->object->webp()->url();
+      }
       $n--;
     });
   }
+
+// ─── SHOP ITEM: pre-fill repeater_matrix on creation ──────────────────────────
+//
+// New shop-item pages start with two bodycopy blocks already in place: an empty
+// 2-column, 1-row table (for product details — title/composer/etc, matching the
+// pattern used on existing products) and the standard Shop Policy blurb, copied
+// verbatim from the transmogrificantus-octet-cassette page so wording/link stay
+// identical across products.
+
+$wire->addHookAfter('Pages::added', function(HookEvent $event) {
+    /** @var Page $page */
+    $page = $event->arguments(0);
+    if ($page->template->name !== 'shop-item') return;
+
+    $table = $page->repeater_matrix->getNewItem('bodycopy');
+    $table->body = '<table style="border-collapse:collapse;width:500px;" border="1">'
+        . '<colgroup><col style="width:50%;" /><col style="width:50%;" /></colgroup>'
+        . '<tbody><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>';
+    $table->save();
+
+    $policy = $page->repeater_matrix->getNewItem('bodycopy');
+    $policy->body = '<p>Review the <a class="uk-text-secondary" href="/directory/shop-policy/">'
+        . '<strong>Shop Policy</strong></a> for additional information about returns and refunds '
+        . 'before placing your order.</p>';
+    $policy->save();
+
+    $page->save('repeater_matrix');
+});
