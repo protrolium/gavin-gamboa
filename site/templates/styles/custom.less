@@ -1,6 +1,6 @@
 // Import UIkit default theme (or uikit.less with only core styles) 
-//@import "../uikit-3.15.10/src/less/uikit.theme.less";
-//@import (inline) "google-fonts.css";
+// @import "../uikit-3.15.10/src/less/uikit.theme.less";
+// @import (inline) "google-fonts.css";
 
 // available fonts
 
@@ -426,12 +426,79 @@ a.noHover:hover {
     color: var(--text-color);
 }
 
+// Lightbox: frosted-glass backdrop instead of solid black, so the page reads through, blurred
+.uk-lightbox {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.store-item-panel {
+    border: 1px solid var(--text-color);
+    border-radius: 8px;
+    padding: 20px 20px 0 20px;
+    // max-width: 180px;
+}
+
+.store-item-panel-col {
+    align-self: flex-start;
+}
+
+.shop-item-thumb {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shop-item-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.bodycopy-content table {
+    width: 100% !important;
+    max-width: 500px;
+    table-layout: fixed;
+}
+.bodycopy-content table col {
+    width: auto !important;
+}
+.bodycopy-content {
+    overflow-x: auto;
+}
+.bodycopy-content td,
+.bodycopy-content th {
+    padding: 4px;
+    overflow-wrap: break-word;
+}
+
+.shop-gallery {
+    max-width: 500px;
+}
+
+.shop-gallery-thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.shop-gallery-thumbs .gallery-item {
+    flex: 0 0 calc((100% - 30px) / 3); // 3 per row (2 gaps of 15px), wraps beyond that
+}
+
 // Mobile background image positioning using ProcessWire focus
 @media (max-width: 767px) {
     .home-background {
         background-position-x: var(--focus-x) !important;
         background-position-y: var(--focus-y) !important;
         background-size: auto 100% !important; // Adjust this value to control zoom level
+    }
+}
+
+@media (min-width: 960px) {
+    .shop-item-thumb {
+        height: 500px;
     }
 }
 

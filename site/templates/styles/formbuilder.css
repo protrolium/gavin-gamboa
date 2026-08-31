@@ -24,6 +24,14 @@
 .contact-form .FormBuilder select {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
+/* Shop forms: match that same monospace treatment for quantity/email fields. Scoped by
+   field id, not form name — #Inputfield_quantity / #Inputfield_email_address are unique
+   by field name across the whole site (FormBuilder derives them from the field, not the
+   form), so this applies to any current or future shop-item form using those field names. */
+.store-item-panel #Inputfield_quantity,
+.store-item-panel #Inputfield_email_address {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
 
 /* Prevent browser autofill from forcing mismatched colors (email field often affected) */
 .FormBuilder input:-webkit-autofill,
@@ -212,6 +220,13 @@
   position: relative;
   top: 2px;
 }
+/* Space between a checkbox/radio and its label text — markup is
+   <label><input type=checkbox><span class='pw-no-select'>Text</span></label> with no gap. */
+.FormBuilder.InputfieldForm .InputfieldCheckbox input[type=checkbox],
+.FormBuilder.InputfieldForm .InputfieldCheckboxes input[type=checkbox],
+.FormBuilder.InputfieldForm .InputfieldRadios input[type=radio] {
+  margin-right: 10px;
+}
 .FormBuilder.InputfieldForm .InputfieldToggle .InputfieldToggleGroup label {
   height: 40px;
   line-height: 40px;
@@ -227,8 +242,41 @@
 .FormBuilder.InputfieldForm .wrap_Inputfield- {
   display: none;
 }
+/* Narrow any "quantity" field's number input, on any form.
+   #Inputfield_quantity is generic already — FormBuilder derives it from the field
+   name, not the form name. Must be an ID selector: the input:not([type=...]) rule
+   above chains four :not() clauses, which out-specifies a plain class+attribute
+   selector even though this rule comes later in the file. */
+#Inputfield_quantity {
+  width: 60px;
+  max-width: 60px;
+}
+/* Hide the blank placeholder option FormBuilder still renders on the score_type select
+   despite the field being marked required — PW core only skips it when required AND
+   $this->attr('value') is set, and FormBuilder isn't populating that attribute the way
+   core expects for this field's default-selected option. Guaranteed fix regardless of
+   the underlying cause: the field always has a real option selected anyway. */
+#Inputfield_score_type option[value=""] {
+  display: none;
+}
+/* Remove the trailing gap below any shop form's submit button — scoped to .store-item-panel
+   (present on every shop-item product page), same generalization as the border-radius rule
+   below. Chained through the actual DOM ancestry (.store-item-panel > .FormBuilder.InputfieldForm
+   > .InputfieldSubmit) to reach 4 classes of specificity — .store-item-panel .InputfieldSubmit
+   alone would only be 2, which loses to .FormBuilder.InputfieldForm .Inputfield's 3 (line ~135)
+   regardless of source order, since specificity is evaluated before cascade order. */
+.store-item-panel .FormBuilder.InputfieldForm .InputfieldSubmit {
+  margin-bottom: 0;
+}
 .FormBuilder.InputfieldForm .InputfieldSubmit button {
   font-weight: 500;
+}
+/* Rounded corners on any shop form's submit button — scoped to .store-item-panel (present
+   on every shop-item product page) rather than one form by name, so it covers any current
+   or future purchase-* form. Deliberately NOT applied to .InputfieldSubmit button generally,
+   since that would also round contact-form's button, which was never meant to change. */
+.store-item-panel .InputfieldSubmit button {
+  border-radius: 8px;
 }
 .FormBuilder.InputfieldForm .InputfieldSubmit button:hover {
   opacity: 0.9;
