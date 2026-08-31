@@ -1,19 +1,19 @@
 {foreach $page->repeater_matrix as $item}
 
     {if $item->type == "bodycopy"}
-        <div class="uk-margin-large-bottom">
+        <div class="{$item->item_spacing_top->value} {$item->item_spacing_bottom->value} bodycopy-content">
             {$item->body|noescape}
         </div>
     {/if}
 
     {if $item->type == "single_image"}
-        <div class="uk-margin-large-top uk-margin-large-bottom">
+        <div class="{$item->item_spacing_top->value} {$item->item_spacing_bottom->value}">
             <img src="{$item->image->url}" alt="{$item->image->title}" uk-img>
         </div>
     {/if}
 
     {if $item->type == "blockquote"}
-        <blockquote class="uk-margin-top">
+        <blockquote class="{$item->item_spacing_top->value} {$item->item_spacing_bottom->value}">
             <p>{$item->body|noescape}</p>
             {if $item??->author}
                 <footer class="uk-text-large">{$item->author}</footer>
@@ -134,8 +134,14 @@
     {/if}
 
     {if $item->type == "code_embed_repeater"}
-        <div class="uk-margin-large-top">
+        <div class="{$item->item_spacing_top->value} {$item->item_spacing_bottom->value}">
             {$item->code_embed|noescape}
+        </div>
+    {/if}
+
+    {if $item->type == "select_image_page_repeater"}
+        <div class="{$item->item_spacing_top->value} {$item->item_spacing_bottom->value}">
+            {$item->select_image_page->markup|noescape}
         </div>
     {/if}
 
