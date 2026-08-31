@@ -10,13 +10,14 @@
 
                     {foreach $events as $event}
                         {var $ts = (int) $event->getUnformatted('event_datetime')}
+                        {var $eventImage = $event->hasField('featured_image') ? $event??->featured_image??->first : null}
 
                         <li>
                             <a class="uk-accordion-title" href>
                                 <div class="uk-grid uk-flex-middle uk-grid-collapse" uk-grid>
                                     <div class="uk-width-auto uk-text-center uk-padding-small uk-padding-remove-left uk-padding-remove-top">
-                                        <div class="uk-text-large uk-text-bold">{wireDate('j', $ts)}</div>
-                                        <div class="uk-text-small uk-text-uppercase">{wireDate('M', $ts)}</div>
+                                        <div class="uk-text-large uk-text-bold">{wiredate('j', $ts)}</div>
+                                        <div class="uk-text-small uk-text-uppercase">{wiredate('M', $ts)}</div>
                                     </div>
 
                                     <div>
@@ -35,9 +36,9 @@
                             <div class="uk-accordion-content">
                                 {if $event->organization}
                                     <p>
-                                        <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span> 
-                                        • 
-                                        <span class="uk-margin-small-left">{wireDate('g:i A', $ts)}</span>
+                                        <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span>
+                                        •
+                                        <span class="uk-margin-small-left">{wiredate('g:i A', $ts)}</span>
                                     </p>
                                 {/if}
                                 {if $event->program}
@@ -48,6 +49,11 @@
                                     class="noExternalSVG uk-button uk-button-primary uk-button-small">
                                         Tickets
                                     </a>
+                                {/if}
+                                {if $eventImage}
+                                    <div class="uk-margin-top">
+                                        <img src="{$eventImage->width(1000)->url}" alt="{$eventImage->description}" uk-img>
+                                    </div>
                                 {/if}
                             </div>
                         </li>
@@ -64,13 +70,14 @@
 
                     {foreach $events as $event}
                         {var $ts = (int) $event->getUnformatted('event_datetime')}
+                        {var $eventImage = $event->hasField('featured_image') ? $event??->featured_image??->first : null}
 
                         <li>
                             <a class="uk-accordion-title" href>
                                 <div class="uk-grid uk-flex-middle" uk-grid>
                                     <div class="uk-width-auto uk-text-center">
-                                        <div class="uk-text-large uk-text-bold">{wireDate('j', $ts)}</div>
-                                        <div class="uk-text-small uk-text-uppercase">{wireDate('M', $ts)}</div>
+                                        <div class="uk-text-large uk-text-bold">{wiredate('j', $ts)}</div>
+                                        <div class="uk-text-small uk-text-uppercase">{wiredate('M', $ts)}</div>
                                     </div>
 
                                     <div class="uk-transition-toggle">
@@ -87,22 +94,34 @@
                             </a>
 
                             <div class="uk-accordion-content" style="margin-left: 103px;">
-                                {if $event->organization}
-                                    <p>
-                                        <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span> 
-                                        • 
-                                        <span class="uk-margin-small-left">{wireDate('g:i A', $ts)}</span>
-                                    </p>
-                                {/if}
-                                {if $event->program}
-                                    <div class="uk-margin-bottom">{$event->program|noescape}</div>
-                                {/if}
-                                {if $event->tickets_url}
-                                    <a href="{$event->tickets_url}" target="_blank" rel="noopener"
-                                    class="noExternalSVG uk-button uk-button-primary uk-button-small">
-                                        Tickets
-                                    </a>
-                                {/if}
+                                <div class="uk-grid uk-flex-top" uk-grid>
+                                    <div class="{if $eventImage}uk-width-expand{else}uk-width-1-1{/if}">
+                                        {if $event->organization}
+                                            <p>
+                                                <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span>
+                                                •
+                                                <span class="uk-margin-small-left">{wiredate('g:i A', $ts)}</span>
+                                            </p>
+                                        {/if}
+                                        {if $event->program}
+                                            <div class="uk-margin-bottom">{$event->program|noescape}</div>
+                                        {/if}
+                                        {if $event->tickets_url}
+                                            <a href="{$event->tickets_url}" target="_blank" rel="noopener"
+                                            class="noExternalSVG uk-button uk-button-primary uk-button-small">
+                                                Tickets
+                                            </a>
+                                        {/if}
+                                    </div>
+                                    {if $eventImage}
+                                        <div class="uk-width-auto" style="width: 350px;" uk-lightbox>
+                                            <a href="{$eventImage->width(1200)->url}" data-caption="{$eventImage->description}">
+                                                {* served at 2x (700px) for retina against the 350 CSS px box, same reasoning as gallery.latte *}
+                                                <img src="{$eventImage->width(700)->url}" alt="{$eventImage->description}" uk-img>
+                                            </a>
+                                        </div>
+                                    {/if}
+                                </div>
                             </div>
                         </li>
 
