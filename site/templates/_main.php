@@ -60,7 +60,12 @@ $home = $pages->get('/'); // homepage directory
 		<?= $rockfrontend->scriptTag($config->urls->templates . "dst/scripts.min.js") ?>
 
 		<!-- load FormBuilder styles -->
-		<?php if (!empty($formStyles)): ?><?= $formStyles ?><?php endif; ?>
+		<?php
+		// storeItemFormStyles (set in store-item.php) is a snapshot taken after formStyles,
+		// so it already contains everything formStyles has plus the page's selected form —
+		// output only one to avoid duplicating shared assets like Stripe.js.
+		$pageFormStyles = !empty($storeItemFormStyles) ? $storeItemFormStyles : ($formStyles ?? '');
+		if (!empty($pageFormStyles)): ?><?= $pageFormStyles ?><?php endif; ?>
 		
 		<!-- make sure we get styling on mobile by setting meta viewport -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,7 +120,9 @@ $home = $pages->get('/'); // homepage directory
 		</script>
 		
 		<!-- load FormBuilder scripts -->
-		<?php if (!empty($formScripts)): ?><?= $formScripts ?><?php endif; ?>
+		<?php
+		$pageFormScripts = !empty($storeItemFormScripts) ? $storeItemFormScripts : ($formScripts ?? '');
+		if (!empty($pageFormScripts)): ?><?= $pageFormScripts ?><?php endif; ?>
 		<!-- scripts for once DOM is loaded -->
 		<script type="text/javascript" src="<?php echo $config->urls->templates?>scripts/onload.js" defer></script>
 		<!-- mastodon verification -->
