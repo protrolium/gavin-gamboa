@@ -71,3 +71,65 @@ document.addEventListener("DOMContentLoaded", function() {
       window.addEventListener("orientationChange", lazyload);
     }
 })
+
+/////////
+
+// shop-item.latte: live-updating price = unit price (cents) x quantity, generic across
+// any shop-item product/form. Unit price comes from whichever source the form actually
+// has: a score_type-style variant select, if present, is authoritative once the customer
+// picks an option; otherwise falls back to the form's flat base price (shop-item.php
+// exposes it as data-unit-price-cents, since a form with no variant selector has no field
+// for JS to read a live price from at all).
+function updateShopItemPrice() {
+  var scoreType = document.getElementById('Inputfield_score_type');
+  var quantity = document.getElementById('Inputfield_quantity');
+  var priceEl = document.getElementById('shop-item-price');
+
+  // Only present on shop-item pages; no-op everywhere else.
+  if (!priceEl) {
+    return;
+  }
+
+  var basePriceCents = parseInt(priceEl.getAttribute('data-unit-price-cents'), 10) || 0;
+
+  // Derive which score_type value keeps quantity visible from its own data-show-if
+  // attribute (e.g. "score_type=3000"), rather than hardcoding that value again here —
+  // stays in sync if the FormBuilder dependency is ever changed in admin. Only relevant
+  // when a score_type field actually exists on this form.
+  // data-show-if lives on the wrapping .Inputfield div (id="wrap_Inputfield_quantity"),
+  // not on the <input> itself — closest() walks up to find it rather than assuming
+  // a fixed wrapper id/depth.
+  var quantityShowIfValue = null;
+  if (scoreType && quantity) {
+    var showIfEl = quantity.closest('[data-show-if]');
+    var showIf = showIfEl ? (showIfEl.getAttribute('data-show-if') || '') : '';
+    var match = showIf.match(/score_type=([^,]+)/);
+    if (match) quantityShowIfValue = match[1];
+  }
+
+  function render() {
+    var unitCents = scoreType ? (parseInt(scoreType.value, 10) || 0) : basePriceCents;
+    var qty = quantity ? (parseInt(quantity.value, 10) || 1) : 1;
+    var total = (unitCents * qty) / 100;
+    priceEl.textContent = '$' + total.toFixed(2);
+  }
+
+  if (scoreType) {
+    scoreType.addEventListener('change', function() {
+      // data-show-if only hides the field — its stale value still gets submitted. Quantity
+      // only means anything for the physical option, so reset it rather than silently
+      // carrying a leftover count (e.g. 2) into a digital order that should only ever be 1.
+      if (quantity && quantityShowIfValue !== null && scoreType.value !== quantityShowIfValue) {
+        quantity.value = '1';
+      }
+      render();
+    });
+  }
+  if (quantity) {
+    quantity.addEventListener('input', render);
+    quantity.addEventListener('change', render);
+  }
+  render();
+}
+
+document.addEventListener('DOMContentLoaded', updateShopItemPrice);
