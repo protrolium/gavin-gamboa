@@ -31,8 +31,19 @@ if ($config->rockdevtools) {
         ->save('/site/templates/dst/scripts.min.js');
   }
 
-// render FormBuilder form once — avoid double render (double emails)
-$form = $forms->render('contact-form');
-$formStyles = $form->styles;
-$formScripts = $form->scripts;
-wire()->set('contactFormHtml', (string) $form); // expose to Latte via wire fuel
+// Render FormBuilder forms once — avoid double render (double emails, and on Stripe forms,
+// a double-processed return from checkout that clears its own session state on the 2nd pass).
+// contact-form is used site-wide (contact.latte) so it's rendered here unconditionally.
+// purchase-aelfie-impromptus is NOT rendered here — store-item.php renders whichever form
+// a given page's form_selection names (often this one), so pre-rendering it here too would
+// process it twice per request.
+$contactForm = $forms->render('contact-form');
+
+// FormBuilder's ->styles/->scripts reflect the whole $config->styles/scripts queue at
+// access time (not per-form assets) — see store-item.php, which overrides these on pages
+// that render their own form, since that render adds more to the same queue afterward.
+$formStyles = $contactForm->styles;
+$formScripts = $contactForm->scripts;
+
+// expose to Latte via wire fuel
+wire()->set('contactFormHtml', (string) $contactForm);
