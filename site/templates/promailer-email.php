@@ -206,7 +206,7 @@ if($isHtml) { ?>
 			?>
 			<br>
 			<a style="color: #e83561;" href="https://gav.cloud">Bandcamp</a> • 
-			<a style="color: #e83561;" href="https://alpha.subvert.fm/gavin-gamboa">Subvert</a> • 
+			<a style="color: #e83561;" href="https://subvert.fm/gavin-gamboa">Subvert</a> • 
 			<a style="color: #e83561;" href="https://youtube.com/@gavcloud">YouTube</a> 
 			<br>
 			<a style="color: #e83561;" href="https://sonomu.club/@gavcloud">Mastodon</a> • 
