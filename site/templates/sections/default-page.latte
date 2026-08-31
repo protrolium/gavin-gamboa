@@ -19,29 +19,28 @@
                     <h1 style="line-height:1em;">{$page->title|noescape}</h1>
 
                     {* date + tags *}
-                    <div 
-                        class="uk-padding-small uk-padding-remove-top uk-padding-remove-left uk-text-muted"
-                        uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
-                        
-                        {* don't show date on about | support pages *}
-                        {var $excludePages = ["about", "support", "music", "ai-policy", "colophon", "sitemap"]}
-                        {if !in_array($page->name, $excludePages)}  
-                            <div class="uk-flex uk-flex-middle">
-                                <span class="text-light hover-icon" uk-icon="icon: clock; ratio: 0.8"></span>
-                                &nbsp;
-                                <span class="uk-text-small">{$page->post_date}</span>
+                    {if $page??->enable_post_date}
+                        {if $page->enable_post_date == true}
+                            <div class="uk-padding-small uk-padding-remove-top uk-padding-remove-left uk-text-muted" 
+                                uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 350; repeat: false;">
+                                  
+                                    <div class="uk-flex uk-flex-middle">
+                                        <span class="text-light hover-icon" uk-icon="icon: clock; ratio: 0.8"></span>
+                                        &nbsp;
+                                        <span class="uk-text-small" style="font-family: monospace;">{$page->post_date}</span>
+                                    </div>
+
+                                {if $page??->categories}
+                                    <span class="uk-text-secondary">
+                                        {foreach $page->categories as $tag}
+                                            <span uk-icon="icon: tag; ratio: 0.7"></span>
+                                            <a href="{$tag->url}" alt=""><span>{$tag->title}</span></a>    
+                                        {/foreach}
+                                    </span>
+                                {/if}
                             </div>
                         {/if}
-
-                        {if $page??->categories}
-                            <span class="uk-text-secondary">
-                                {foreach $page->categories as $tag}
-                                    <span uk-icon="icon: tag; ratio: 0.7"></span>
-                                    <a href="{$tag->url}" alt=""><span>{$tag->title}</span></a>    
-                                {/foreach}
-                            </span>
-                        {/if}
-                    </div>
+                    {/if}
                 </div>
 
                 <div>
