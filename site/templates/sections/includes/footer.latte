@@ -19,9 +19,9 @@
             <div class="uk-width-1-4@m uk-padding-remove-left uk-margin-bottom">
                 <p class="uk-margin-remove-bottom uk-text-large">{$pages->get('name=directory')->title|capitalize}</p>
                 <div style="margin-top: 5px;">
-                    {foreach $pages->get('name=directory')->children() as $child}
+                    {foreach $pages->find('name=colophon|sitemap, parent=directory') as $dir}
                         <p class="uk-margin-remove-bottom uk-margin-remove-top">
-                            <a class="uk-text-secondary" href="{$child->url}">{$child->title}</a>
+                            <a class="uk-text-secondary" href="{$dir->url}">{$dir->title}</a>
                         </p>
                     {/foreach}
                 </div>
