@@ -1,19 +1,31 @@
-{* image gallery module *}
-<div 
-    class="page-item uk-margin-auto uk-margin-remove-top"
-    uk-grid uk-lightbox>
-    {* had this as a div attribute for image-by-image lazy loading *}
-    {* uk-scrollspy="cls: uk-animation-fade; target: .gallery-item; delay: 250; repeat: false" *}
-    
-    {foreach $page->gallery as $image}
-        <div class="gallery-item uk-width-1-1@s uk-cover-container">
+{* image gallery module: large first image (replaces the old featured image spot) with the
+   remaining images as smaller thumbnails underneath. All links share one uk-lightbox container,
+   so the lightbox's left/right arrow keys cycle through the full set regardless of this layout. *}
+{var $galleryFirst = $page->gallery->first()}
+{var $galleryRest = $page->gallery->slice(1)}
 
-            <a href="{$image->url}" data-caption="{$image->description}" data-fancybox="gallery">
-                <img src="{$image->url}" alt="{$image->description}" uk-cover/>
-                <canvas width="1280" height="720"></canvas>
-            </a>
+<div class="shop-gallery" uk-lightbox>
 
-        </div>
-    {/foreach}
+    {* .shop-gallery caps this at 500 CSS px wide — served at 2x (1000px) for retina,
+       same reasoning as the shop.latte grid thumbnails. *}
+    <div class="uk-margin-small-bottom">
+        <a href="{$galleryFirst->url}" data-caption="{$galleryFirst->description}">
+            <img src="{$galleryFirst->width(1000)->url}" alt="{$galleryFirst->description}" uk-img>
+        </a>
+    </div>
+
+    <div class="shop-gallery-thumbs">
+        {foreach $galleryRest as $image}
+            <div class="gallery-item uk-cover-container">
+                <a href="{$image->url}" data-caption="{$image->description}">
+                    {* uk-cover crops to fill a box shaped by the canvas's 500:700 ratio —
+                       size() matches that ratio exactly (600:840 = 500:700) so there's no
+                       wasted/mismatched cropping, at 2x for retina. *}
+                    <img src="{$image->size(600, 840)->url}" alt="{$image->description}" uk-cover/>
+                    <canvas width="500" height="700"></canvas>
+                </a>
+            </div>
+        {/foreach}
+    </div>
 
 </div>
