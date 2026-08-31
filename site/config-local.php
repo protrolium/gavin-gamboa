@@ -4,7 +4,7 @@ $config->rockdevtools = true;
 
 /** @var Config $config */
 $config->debug = true;
-$config->advanced = true;
+$config->advanced = false;
 $config->dbHost = 'localhost';
 $config->dbName = 'gavingamboa';
 $config->dbUser = 'root';
