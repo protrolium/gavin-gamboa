@@ -1,0 +1,71 @@
+<section>
+    <div class="uk-width-4-5@m uk-padding" uk-height-viewport="expand: true" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 500; repeat: false;">
+
+        <div>
+            <h1 style="line-height:1em;">
+                {$page->title|noescape}
+            </h1>
+
+            <h4 class="uk-margin-remove-top uk-margin-large-bottom">
+                {$page->shop_item_description}
+            </h4>
+        </div>
+
+        <div class="uk-grid-large" uk-grid>
+            <div class="uk-width-1-1 uk-width-3-5@m">
+                {* {if $page??->featured_image??->first}
+                    <div class="uk-margin-medium-bottom" uk-lightbox>
+                        <a href="{$page->featured_image->first->url}" data-caption="{$page->featured_image->first->description}">
+                            <img src="{$page->featured_image->first->width(500)->url}" alt="{$page->featured_image->first->description}" uk-img>
+                        </a>
+                    </div>
+                {/if} *}
+
+                {* gallery *}
+                <div>
+                    {if $page??->gallery}
+                        {if $page->gallery->count > 1}
+                            <div>
+                                {$rockfrontend->render("/sections/includes/gallery.latte")}
+                            </div>
+                        {else}
+                            <div class="uk-width-1-1">
+                                {if $page->gallery->count == 1}
+                                    <div class="uk-width-2-3 uk-margin-bottom uk-visible@m">
+                                        <img src="{$page->gallery->first->url}" alt="{$page->gallery->first->title}" uk-img>
+                                    </div>
+                                {/if}
+                            </div>
+                        {/if}
+                    {/if}
+                </div>
+            </div>
+
+            <div class="uk-width-1-1 uk-width-2-5@m store-item-panel-col">
+                <div class="store-item-panel">
+                    <div>
+                        {if isset($storeItemFormHtml)}
+                            <p class="uk-h3 uk-margin-remove-bottom">
+                                <span id="shop-item-price" data-unit-price-cents="{$storeItemUnitPriceCents ?? 0}"></span> <span style="font-size: 16px;">USD</span>
+                            </p>
+                            {$storeItemFormHtml|noescape}
+                        {/if}
+
+                        {* stripe and apple pay icons *}
+                        {* <div>
+                            <a class="uk-icon noHover uk-margin-right">{$pages->get('name=stripe')->markup|noescape}</a><a class="uk-icon noHover">{$pages->get('name=apple-pay')->markup|noescape}</a>
+                        </div> *}
+
+                    </div>
+                </div>
+
+                {* render the repeater matrix *}
+                <div class="uk-margin">
+                    {$rockfrontend->render("/sections/includes/repeater-matrix-default.latte")}
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>

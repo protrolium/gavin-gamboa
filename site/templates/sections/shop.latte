@@ -1,0 +1,28 @@
+<section>
+    <div class="uk-width-4-5@m uk-padding" uk-height-viewport="expand: true" uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 500; repeat: false;">
+
+        <div>
+            <h1 class="uk-margin-large-bottom" style="line-height:1em;">
+                {$page->title|noescape}
+            </h1>
+        </div>
+
+        <div class="uk-child-width-1-2@s uk-grid-match" uk-grid uk-scrollspy="cls: uk-animation-fade; target: > div; delay: 800; repeat: false;">
+            {foreach $page->children('template=shop-item') as $item}
+                <div>
+                    <a href="{$item->url}">
+                        {if $item??->featured_image??->first}
+                            <div class="uk-margin-small-bottom shop-item-thumb">
+                                <img src="{$item->featured_image->first->height(1000)->url}" alt="{$item->featured_image->first->description}" uk-img>
+                            </div>
+                        {/if}
+                        <h3 class="uk-h4 uk-margin-remove uk-flex uk-flex-center uk-text-center" style="line-height:1.2em;">
+                            {$item->title|noescape}
+                        </h3>
+                    </a>
+                </div>
+            {/foreach}
+        </div>
+
+    </div>
+</section>
