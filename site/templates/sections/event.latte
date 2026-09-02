@@ -39,6 +39,8 @@
                                         <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span>
                                         •
                                         <span class="uk-margin-small-left">{wiredate('g:i A', $ts)}</span>
+                                        •
+                                        <span class="uk-margin-small-left">{wiredate('Y F j', $ts)}
                                     </p>
                                 {/if}
                                 {if $event->program}
@@ -100,7 +102,9 @@
                                             <p>
                                                 <span class="uk-margin-small-right uk-text-bold">{$event->organization|noescape}</span>
                                                 •
-                                                <span class="uk-margin-small-left">{wiredate('g:i A', $ts)}</span>
+                                                <span class="uk-margin-small-left uk-margin-small-right">{wiredate('g:i A', $ts)}</span>
+                                                •
+                                                <span class="uk-margin-small-left">{wiredate('Y F j', $ts)}
                                             </p>
                                         {/if}
                                         {if $event->program}
