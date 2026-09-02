@@ -31,11 +31,6 @@ wire()->addHookAfter('FormBuilderProcessorStripe::createStripeSessionData', func
 });
 
 // subscribe_to_the_newsletter checkbox opts the customer into the ProMailer newsletter list
-// (id 1, "Gavin Gamboa Newsletter" — id 2 is just the "Testing" list). Generic across any
-// shop form using this checkbox field name, not just purchase-aelfie-impromptus.
-//
-// Hooked after chargeSuccess (payment confirmed), not at initial submission — someone who
-// checks the box but abandons checkout at Stripe never gets subscribed.
 //
 // Email: prefers the form's own on-site email_address field (what the customer actually typed
 // on this site) when present; falls back to payment_data.email (from Stripe's billing/customer
