@@ -301,3 +301,20 @@ $wire->addHookAfter('Pages::added', function(HookEvent $event) {
 
     $page->save('repeater_matrix');
 });
+
+// ─── FORMBUILDER: load hooks files for admin entry actions ────────────────────
+//
+// FormBuilder only calls loadHooksFile() (which include_once's hooks.php and
+// hooks-{formName}.php) from its own front-end render()/getFromURL() methods.
+// Admin actions in Setup > Forms > entries (Resend admin email, Resend
+// auto-responder email, etc.) go through ProcessFormBuilderEntries, which
+// builds its own FormBuilderProcessor via $form->processor() directly and
+// never touches those methods — so e.g. the emailFormResponderReady hook that
+// builds the secure PDF download link never runs, and {secure_pdf_link}
+// renders empty on a resent email. Load the hooks files ourselves before the
+// action runs so admin-triggered sends behave the same as a live checkout.
+$wire->addHookBefore('ProcessFormBuilderEntries::processActionForEntry', function(HookEvent $event) {
+    /** @var FormBuilderForm $form */
+    $form = $event->arguments(2);
+    if ($form) wire('forms')->loadHooksFile($form->name);
+});
