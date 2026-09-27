@@ -78,25 +78,5 @@ $styles = array(
 <?php endif; ?>
 
 </body>
-<footer>
-	<h4 style="margin-bottom: 2px;">Gavin Gamboa · <a style="color: #e83561;" href="https://gavingamboa.net" target="_blank">website</a> · <a style="color: #e83561;"href="https://gavart.ist" target="_blank">wiki</a></h4>
-	<span><em>composer · creative technologist</em></span>
-	<br>
-	<?php 
-		$juliaImage = $pages->get('name=julia-set-001, template=image');
-		if($juliaImage->id && $juliaImage->featured_image->first) {
-			$juliaUrl = $juliaImage->featured_image->first->httpUrl;
-			echo '<img src="' . $sanitizer->entities($juliaUrl) . '" width="100" alt="" style="width: 100px; max-width: 100px; height: auto; display: block;">';
-		}
-	?>
-	<br>
-	<a style="color: #e83561;" href="https://gav.cloud">Bandcamp</a> • 
-	<a style="color: #e83561;" href="https://subvert.fm/gavin-gamboa">Subvert</a> • 
-	<a style="color: #e83561;" href="https://youtube.com/@gavcloud">YouTube</a> 
-	<br>
-	<a style="color: #e83561;" href="https://sonomu.club/@gavcloud">Mastodon</a> • 
-	<a style="color: #e83561;" href="https://bsky.app/profile/gav.cloud">Bluesky</a> • 
-	<a style="color: #e83561;" href="https://instagram.com/gavcloud">Instagram</a>
-	<br>
-</footer>
+<?php include __DIR__ . '/_email-signature.php'; ?>
 </html>

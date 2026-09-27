@@ -318,3 +318,50 @@ $wire->addHookBefore('ProcessFormBuilderEntries::processActionForEntry', functio
     $form = $event->arguments(2);
     if ($form) wire('forms')->loadHooksFile($form->name);
 });
+
+// ─── FORMBUILDER: "Send shipping notification" entry action ───────────────────
+//
+// Adds a button next to "Resend admin email" in Setup > Forms > entries, for any
+// form that has tracking_number + carrier fields (the physical shop products).
+// Check entries, fill in Tracking Number + Carrier on each first, then click it:
+// emails the customer a tracking link (helpers: scripts/shop-shipping-email.php,
+// template: FormBuilder/email-shipped.php)
+// and writes "Yes" to order_fulfilled. Entries already marked "Yes" are skipped
+// so a double-click can't re-send — clear order_fulfilled to send again.
+
+$wire->addHookAfter('ProcessFormBuilderEntries::getAllowedActions', function(HookEvent $event) {
+    /** @var FormBuilderForm $form */
+    $form = $event->arguments(0);
+    if (!$form->getField('tracking_number') || !$form->getField('carrier')) return;
+    if (!$form->hasPermission('entries-resend')) return;
+
+    $shipped = [
+        'name'  => 'email-shipped',
+        'label' => 'Send shipping notification',
+        'icon'  => 'truck',
+    ];
+
+    // slot it in right after the resend-email actions
+    $actions = [];
+    $inserted = false;
+    foreach ($event->return as $action) {
+        $actions[] = $action;
+        if (!$inserted && $action['name'] === 'email-autoresponder') {
+            $actions[] = $shipped;
+            $inserted = true;
+        }
+    }
+    if (!$inserted) $actions[] = $shipped;
+
+    $event->return = $actions;
+});
+
+$wire->addHookBefore('ProcessFormBuilderEntries::processActionForEntry', function(HookEvent $event) {
+    $action = $event->arguments(0);
+    if ($action['name'] !== 'email-shipped') return;
+
+    require_once wire('config')->paths->templates . 'scripts/shop-shipping-email.php';
+
+    $event->replace = true;
+    $event->return = shopSendShippedEmail($event->arguments(1), $event->arguments(2), $event->object);
+});
