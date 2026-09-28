@@ -21,6 +21,17 @@ function shopTrackingUrl(string $carrier, string $trackingNumber): string {
     return $urls[$key] . rawurlencode(preg_replace('/\s+/', '', $trackingNumber));
 }
 
+// Product name for a shop form: the title of the shop-item page that embeds it (via its
+// form_selection field), e.g. "Transmogrificantus Octet · Cassette". Falls back to the
+// form's Stripe "Charge name" if no page uses the form. '' if neither is set.
+function shopProductName(FormBuilderForm $form): string {
+    $page = wire('pages')->get('template=shop-item, include=all, form_selection=' . wire('sanitizer')->selectorValue($form->name));
+    if ($page->id && $page->title) return (string) $page->title;
+
+    $stripe = $form->FormBuilderProcessorStripe;
+    return trim((string) (is_array($stripe) ? ($stripe['chargeName'] ?? '') : ''));
+}
+
 function shopSendShippedEmail(array $entry, FormBuilderForm $form, Wire $notices): bool {
     $id = (int) $entry['id'];
 
@@ -44,19 +55,22 @@ function shopSendShippedEmail(array $entry, FormBuilderForm $form, Wire $notices
         $notices->warning("Entry #$id: unrecognized carrier “{$carrier}” — email sent without a tracking link");
     }
 
-    // first name from the Stripe billing name, falling back to the form's own name field
-    $fullName  = trim((string) (($payment['name'] ?? '') ?: ($entry['your_name'] ?? '')));
+    // first name from the Stripe billing name only — your_name is a spam honeypot, never a real name
+    $fullName  = trim((string) ($payment['name'] ?? ''));
     $firstName = $fullName === '' ? '' : explode(' ', $fullName)[0];
+
+    $productName = shopProductName($form);
 
     $html = wire('files')->render(wire('config')->paths->templates . 'FormBuilder/email-shipped.php', [
         'firstName'      => $firstName,
+        'productName'    => $productName,
         'carrier'        => $carrier,
         'trackingNumber' => $trackingNumber,
         'trackingUrl'    => $trackingUrl,
     ]);
 
     $text = ($firstName !== '' ? "Hello $firstName," : 'Hello,') . "\n\n"
-        . "Your order has shipped via $carrier.\n\n"
+        . "Your item" . ($productName !== '' ? " $productName" : '') . " has shipped via $carrier.\n\n"
         . "Tracking number: $trackingNumber\n"
         . ($trackingUrl ? "$trackingUrl\n" : '')
         . "\nThank you for your continued support, and for supporting artists directly.\n"
