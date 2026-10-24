@@ -1,5 +1,5 @@
 {var $upcomingOnly = $upcomingOnly ?? false}
-{var $events = $pages->get('name=events')->children('template=event' . ($upcomingOnly ? ', event_datetime>=' . time() : '') . ', sort=event_datetime')}
+{var $events = $pages->get('name=events')->children('template=event' . ($upcomingOnly ? ', event_datetime>=' . time() : '') . ', sort=-event_datetime')}
         
         {if $events->count() === 0}
             <p class="uk-text-muted">No upcoming events</p>
